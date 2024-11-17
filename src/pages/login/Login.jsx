@@ -50,89 +50,105 @@ const Login = () => {
   }
 
   return (
-    <div className="relative w-100 h-screen bg-red-600 overflow-hidden grid grid-cols-2">
-      <div className="bg-blue-400 relative w-full">
+    <div className="relative w-full h-screen grid grid-cols-2 overflow-hidden">
+      {/* Sección Izquierda */}
+      <div className="relative w-full h-full">
         <img
           src="/public/portada-2.jpeg"
           className="absolute w-full h-full object-cover"
         />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/40" />
+        <div className="relative z-10 h-full flex flex-col justify-center items-center text-white px-10">
+          <h2 className="text-5xl font-bold mb-5">¡Bienvenido a Worknet!</h2>
+          <p className="text-lg text-gray-200 text-center">
+            La red laboral del municipio de La Maná. Conecta con oportunidades y
+            construye tu futuro profesional.
+          </p>
+        </div>
       </div>
-      <div className="bg-lime-50 relative w-full flex flex-col justify-center items-center">
-        <div className="w-3/4 flex flex-col gap-10">
-          <div>
-            <h2 className="text-4xl text-[#00b4b7]">
-              Bienvenido a <strong>Worknet</strong>
-            </h2>
-            <h3 className="text-lg text-gray-500 mb-10">
-              La red laboral del municipio de La Maná
-            </h3>
 
-            <h5 className="text-xl italic text-gray-600">
-              Inicia sesión para acceder a tu perfil, explorar oportunidades y
-              conectar con el empleo que buscas.
-            </h5>
+      {/* Sección Derecha */}
+      <div className="relative w-full flex flex-col justify-center items-center bg-gray-50">
+        <div className="w-3/4 max-w-[400px] flex flex-col gap-8">
+          {/* Encabezado */}
+          <div>
+            <h3 className="text-3xl font-bold text-[#00b4b7] mb-2">
+              Inicia Sesión
+            </h3>
+            <p className="text-gray-500">
+              Accede a tu perfil, explora oportunidades y conecta con el empleo
+              que buscas.
+            </p>
           </div>
 
+          {/* Formulario */}
           <form
             action=""
-            className="flex flex-col gap-5"
+            className="flex flex-col gap-6"
             onSubmit={handlesSubmit}
           >
+            {/* Campo Email */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="" className="text-lg text-gray-500 font-semibold">
-                Correo electrónico
+              <label htmlFor="email" className="text-gray-600 font-medium">
+                Correo Electrónico
               </label>
-              <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
+              <div className="flex items-center bg-white rounded-lg shadow-md overflow-hidden">
                 <input
-                  type="text"
-                  className="h-16 w-full px-5 outline-none rounded-md text-lg text-gray-500"
-                  defaultValue={data.email}
+                  type="email"
+                  id="email"
                   name="email"
+                  defaultValue={data.email}
                   onChange={handleChange}
+                  className="w-full px-4 py-3 text-gray-600 outline-none text-base"
+                  placeholder="ejemplo@email.com"
                 />
-                <div className="w-20 flex justify-center items-center">
-                  <RiMailLine size={24} className="text-gray-300" />
+                <div className="px-3">
+                  <RiMailLine size={24} className="text-gray-400" />
                 </div>
               </div>
             </div>
 
+            {/* Campo Contraseña */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="" className="text-gray-500 font-semibold text-lg">
+              <label htmlFor="password" className="text-gray-600 font-medium">
                 Contraseña
               </label>
-              <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
+              <div className="flex items-center bg-white rounded-lg shadow-md overflow-hidden">
                 <input
                   type="password"
-                  className="h-16 w-full px-5 outline-none rounded-md text-lg text-gray-500"
-                  defaultValue={data.password}
+                  id="password"
                   name="password"
+                  defaultValue={data.password}
                   onChange={handleChange}
+                  className="w-full px-4 py-3 text-gray-600 outline-none text-base"
+                  placeholder="••••••••"
                 />
-                <div className="w-20 flex justify-center items-center">
-                  <RiLock2Fill size={24} className="text-gray-300" />
+                <div className="px-3">
+                  <RiLock2Fill size={24} className="text-gray-400" />
                 </div>
               </div>
             </div>
 
+            {/* Botón de Iniciar Sesión */}
             <button
               type="submit"
-              className="h-14 bg-[#00b4b7] text-white text-lg uppercase hover:bg-[#00b4b7]/80 transition-colors"
+              className="w-full py-3 bg-[#00b4b7] text-white font-bold rounded-lg shadow-md hover:bg-[#00b4b7]/90 transition-all"
             >
               Iniciar Sesión
             </button>
           </form>
         </div>
 
-        <p className="absolute bottom-10 text-sm text-gray-500">
-          ¿Aún no tienes una cuenta?.{' '}
+        {/* Registro */}
+        <p className="absolute bottom-8 text-sm text-gray-500">
+          ¿Aún no tienes una cuenta?{' '}
           <Link
             to="/registro"
-            className="underline text-[#00b4b7] hover:text-[#00b4b7]/80 transition-colors font-bold"
+            className="text-[#00b4b7] font-medium underline hover:text-[#009ea0] transition-all"
           >
-            Registrate
+            Regístrate aquí
           </Link>
         </p>
-        <Toaster richColors />
       </div>
     </div>
   )

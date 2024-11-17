@@ -2,8 +2,13 @@ import { VscRobot } from 'react-icons/vsc'
 import { Nav } from '../../components/index.components'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { FaClipboardList } from 'react-icons/fa'
-import { FaUsers } from 'react-icons/fa6'
+import {
+  FaClipboardList,
+  FaCog,
+  FaHistory,
+  FaQuestionCircle,
+} from 'react-icons/fa'
+import { FaPaperPlane, FaUsers } from 'react-icons/fa6'
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -70,6 +75,34 @@ const Home = () => {
               <div className="w-5 h-5 bg-[#00b4b7] rounded-full flex justify-center items-center ml-auto">
                 <span className="text-white text-xs">4</span>
               </div>
+            </NavLink>
+
+            {/* Historial */}
+            <NavLink className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3">
+              <FaHistory className="text-xl text-gray-700" />
+              <h4 className="text-base text-gray-800 font-medium">Historial</h4>
+            </NavLink>
+
+            {/* Configuración */}
+            <NavLink className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3">
+              <FaCog className="text-xl text-gray-700" />
+              <h4 className="text-base text-gray-800 font-medium">
+                Configuración
+              </h4>
+            </NavLink>
+
+            {/* Ayuda */}
+            <NavLink className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3">
+              <FaQuestionCircle className="text-xl text-gray-700" />
+              <h4 className="text-base text-gray-800 font-medium">Ayuda</h4>
+            </NavLink>
+
+            {/* Enviar sugerencia */}
+            <NavLink className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3">
+              <FaPaperPlane className="text-xl text-gray-700" />
+              <h4 className="text-base text-gray-800 font-medium">
+                Enviar sugerencia
+              </h4>
             </NavLink>
           </nav>
         </aside>

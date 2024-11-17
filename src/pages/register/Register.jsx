@@ -53,8 +53,8 @@ const Register = () => {
   }
 
   return (
-    <div className="relative w-100 h-screen bg-red-600 overflow-hidden grid grid-cols-2">
-      <div className="bg-lime-50 relative w-full flex flex-col justify-center items-center">
+    <div className="relative w-100 h-screen bg-[#00b4b7] overflow-hidden grid grid-cols-2">
+      <div className="bg-white relative w-full flex flex-col justify-center items-center">
         <div className="w-3/4 flex flex-col gap-2">
           <div>
             <h2 className="text-4xl text-[#00b4b7]">
