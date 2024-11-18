@@ -3,6 +3,7 @@ import { RiLock2Fill, RiMailLine } from 'react-icons/ri'
 import { Link, useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
 import { authEndpoints } from '../../api/auth/auth.api'
+import { storageUtil } from '../../utils/index.utils'
 
 const Login = () => {
   const initialData = {
@@ -33,7 +34,7 @@ const Login = () => {
             if (res.status === 200) {
               toast.success('Inicio de sesión exitoso')
               setTimeout(() => {
-                navigate('/inicio')
+                storageUtil.saveToLocalStorage('session_info', res.data)
               }, 1500)
             }
           })
@@ -52,7 +53,7 @@ const Login = () => {
   return (
     <div className="relative w-full h-screen grid grid-cols-2 overflow-hidden">
       {/* Sección Izquierda */}
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-screen">
         <img
           src="/public/portada-2.jpeg"
           className="absolute w-full h-full object-cover"
@@ -150,6 +151,7 @@ const Login = () => {
           </Link>
         </p>
       </div>
+      <Toaster richColors />
     </div>
   )
 }

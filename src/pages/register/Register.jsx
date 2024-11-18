@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import { RiLock2Fill, RiMailLine, RiUser3Fill } from 'react-icons/ri'
+import {
+  RiLock2Fill,
+  RiMailLine,
+  RiPhoneFill,
+  RiUser3Fill,
+} from 'react-icons/ri'
 import { Link, useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
 import { FaIdCardAlt } from 'react-icons/fa'
 import { FaLocationDot } from 'react-icons/fa6'
 import { userEndpoints } from '../../api/user/user.api'
+import { useProfile } from '../../hooks/index.hooks'
 
 const Register = () => {
-  const initialData = {
-    name: '',
-    surname: '',
-    email: '',
-    password: '',
-    location: '',
-  }
-  const [data, setData] = useState(initialData)
+  const { user } = useProfile()
+  const { profile_picture, ...infoUser } = user
+  const [data, setData] = useState(infoUser)
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -27,9 +28,10 @@ const Register = () => {
   }
 
   const handlesSubmit = async (e) => {
+    console.log(data)
     e.preventDefault()
     try {
-      if (data.email && data.password) {
+      if (Object.values(data).every((value) => value !== '')) {
         userEndpoints
           .register(data)
           .then((res) => {
@@ -81,33 +83,125 @@ const Register = () => {
                 <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
                   <input
                     type="text"
-                    className="h-16 w-full px-5 outline-none rounded-md text-lg text-gray-500"
+                    className="w-full px-4 py-3 text-gray-600 outline-none text-base"
                     defaultValue={data.name}
                     name="name"
                     onChange={handleChange}
                   />
                   <div className="w-20 flex justify-center items-center">
-                    <RiUser3Fill size={24} className="text-gray-300" />
+                    <RiUser3Fill size={22} className="text-gray-400" />
                   </div>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
                 <label
                   htmlFor=""
-                  className="text-gray-500 font-semibold text-lg"
+                  className="text-lg text-gray-500 font-semibold"
                 >
                   Apellidos
                 </label>
                 <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
                   <input
                     type="text"
-                    className="h-16 w-full px-5 outline-none rounded-md text-lg text-gray-500"
+                    className="w-full px-4 py-3 text-gray-600 outline-none text-base"
                     defaultValue={data.surname}
                     name="surname"
                     onChange={handleChange}
                   />
                   <div className="w-20 flex justify-center items-center">
-                    <RiUser3Fill size={24} className="text-gray-300" />
+                    <RiUser3Fill size={22} className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-5">
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor=""
+                  className="text-lg text-gray-500 font-semibold"
+                >
+                  DNI
+                </label>
+                <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 text-gray-600 outline-none text-base"
+                    defaultValue={data.dni}
+                    name="dni"
+                    onChange={handleChange}
+                  />
+                  <div className="w-20 flex justify-center items-center">
+                    <FaIdCardAlt size={22} className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor=""
+                  className="text-lg text-gray-500 font-semibold"
+                >
+                  Teléfono
+                </label>
+                <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 text-gray-600 outline-none text-base"
+                    defaultValue={data.phone}
+                    name="phone"
+                    onChange={handleChange}
+                  />
+                  <div className="w-20 flex justify-center items-center">
+                    <RiPhoneFill size={22} className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-5">
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor=""
+                  className="text-lg text-gray-500 font-semibold"
+                >
+                  Género
+                </label>
+                <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
+                  <select
+                    className="w-full px-4 py-3 text-gray-600 outline-none text-base bg-white"
+                    name="gender"
+                    onChange={handleChange}
+                    defaultValue={data.gender}
+                  >
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                    <option value="Other">Prefiero no decirlo</option>
+                  </select>
+                  <div className="w-20 flex justify-center items-center">
+                    <FaIdCardAlt size={22} className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor=""
+                  className="text-lg text-gray-500 font-semibold"
+                >
+                  Tipo
+                </label>
+                <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
+                  <select
+                    className="w-full px-4 py-3 text-gray-600 outline-none text-base bg-white"
+                    name="role"
+                    onChange={handleChange}
+                    defaultValue={data.role}
+                  >
+                    <option value="Postulante">Postulante</option>
+                    <option value="Reclutador">Reclutador</option>
+                    <option value="Empresa">Empresa</option>
+                  </select>
+                  <div className="w-20 flex justify-center items-center">
+                    <FaIdCardAlt size={22} className="text-gray-400" />
                   </div>
                 </div>
               </div>
@@ -120,13 +214,13 @@ const Register = () => {
               <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
                 <input
                   type="email"
-                  className="h-16 w-full px-5 outline-none rounded-md text-lg text-gray-500"
+                  className="w-full px-4 py-3 text-gray-600 outline-none text-base"
                   defaultValue={data.email}
                   name="email"
                   onChange={handleChange}
                 />
                 <div className="w-20 flex justify-center items-center">
-                  <RiMailLine size={24} className="text-gray-300" />
+                  <RiMailLine size={22} className="text-gray-400" />
                 </div>
               </div>
             </div>
@@ -138,33 +232,13 @@ const Register = () => {
               <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
                 <input
                   type="password"
-                  className="h-16 w-full px-5 outline-none rounded-md text-lg text-gray-500"
+                  className="w-full px-4 py-3 text-gray-600 outline-none text-base"
                   defaultValue={data.password}
                   name="password"
                   onChange={handleChange}
                 />
                 <div className="w-20 flex justify-center items-center">
-                  <RiLock2Fill size={24} className="text-gray-300" />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label htmlFor="" className="text-lg text-gray-500 font-semibold">
-                Género
-              </label>
-              <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
-                <select
-                  className="h-16 w-full px-5 outline-none bg-white rounded-md text-lg text-gray-500"
-                  name="gender"
-                  onChange={handleChange}
-                >
-                  <option value="M">Masculino</option>
-                  <option value="F">Femenino</option>
-                  <option value="Other">Prefiero no decirlo</option>
-                </select>
-                <div className="w-20 flex justify-center items-center">
-                  <FaIdCardAlt size={24} className="text-gray-300" />
+                  <RiLock2Fill size={22} className="text-gray-400" />
                 </div>
               </div>
             </div>
@@ -177,13 +251,13 @@ const Register = () => {
               <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
                 <input
                   type="text"
-                  className="h-16 w-full px-5 outline-none rounded-md text-lg text-gray-500"
-                  defaultValue={data.address}
-                  name="address"
+                  className="w-full p-4 text-gray-600 outline-none text-base"
+                  defaultValue={data.location}
+                  name="location"
                   onChange={handleChange}
                 />
                 <div className="w-20 flex justify-center items-center">
-                  <FaLocationDot size={24} className="text-gray-300" />
+                  <FaLocationDot size={22} className="text-gray-400" />
                 </div>
               </div>
             </div>

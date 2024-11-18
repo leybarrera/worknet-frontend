@@ -1,9 +1,75 @@
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { AiFillMessage } from 'react-icons/ai'
 import { FaMicrophone } from 'react-icons/fa6'
 import { IoIosBriefcase, IoIosNotifications } from 'react-icons/io'
 import { RiHome5Fill, RiMenuFill, RiSearchLine } from 'react-icons/ri'
+import { ChatbotContext } from '../../context/ChatbotContext'
 
 const Nav = () => {
+  const { setIsOpen, setInputText } = useContext(ChatbotContext)
+  const [isListening, setIsListening] = useState(false) // Estado para controlar si está escuchando
+
+  // Crear la instancia de SpeechRecognition fuera de useEffect
+  const recognition = useMemo(
+    () => new (window.SpeechRecognition || window.webkitSpeechRecognition)(),
+    []
+  )
+
+  recognition.lang = 'es-ES'
+  recognition.interimResults = false
+  recognition.continuous = true
+
+  useEffect(() => {
+    recognition.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript
+        .trim()
+        .toLowerCase()
+
+      console.log(transcript)
+      // Comando para abrir el chatbot
+      if (transcript === 'abrir chatbot') {
+        setIsOpen(true)
+      }
+
+      // Comando para cerrar el chatbot
+      else if (transcript === 'cerrar chatbot') {
+        setIsOpen(false)
+      }
+
+      // Si el chatbot está abierto, dictar texto para el input
+      if (
+        transcript &&
+        transcript !== 'abrir chatbot' &&
+        transcript !== 'cerrar chatbot'
+      ) {
+        setInputText(transcript)
+      }
+
+      // Comando para enviar el texto
+      else if (transcript === 'enviar') {
+        // Aquí, el componente de Home manejaría el envío del mensaje.
+      }
+    }
+
+    recognition.onerror = (error) => {
+      console.error('Error en el reconocimiento de voz:', error)
+    }
+
+    // Limpiar el reconocimiento cuando el componente se desmonte
+    return () => {
+      recognition.stop()
+    }
+  }, [setIsOpen, setInputText, recognition])
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognition.stop() // Detener el reconocimiento si ya está escuchando
+    } else {
+      recognition.start() // Iniciar el reconocimiento
+    }
+    setIsListening(!isListening) // Cambiar el estado del micrófono
+  }
+
   return (
     <nav className="fixed top-0 left-0 w-full h-16 bg-[#00b4b7] shadow-md z-50">
       <div className="w-3/4 mx-auto h-full flex justify-between items-center">
@@ -27,7 +93,10 @@ const Nav = () => {
           </div>
 
           {/* Microphone Button */}
-          <button className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300">
+          <button
+            className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"
+            onClick={toggleListening}
+          >
             <FaMicrophone className="text-[#00b4b7]" size={18} />
           </button>
         </div>

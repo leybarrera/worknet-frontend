@@ -7,3 +7,26 @@
 html {
   font-family: 'Roboto', sans-serif;
 }
+
+/* Animación de deslizamiento vertical */
+.slide-enter {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+.slide-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 500ms, opacity 500ms;
+}
+
+.slide-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.slide-exit-active {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 500ms, opacity 500ms;
+}
