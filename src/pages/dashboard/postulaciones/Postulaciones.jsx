@@ -1,5 +1,4 @@
-import { RiDeleteBin6Line, RiAddCircleLine } from 'react-icons/ri'
-import { NavLink } from 'react-router-dom'
+import { RiDeleteBin6Line } from 'react-icons/ri'
 
 const Postulaciones = () => {
   const postulaciones = [
@@ -46,17 +45,6 @@ const Postulaciones = () => {
   return (
     <section className="pl-[320px] p-8 w-full">
       <h2 className="text-2xl font-semibold mb-4">Postulaciones</h2>
-
-      {/* Botón para crear una nueva postulación */}
-      <div className="mb-4">
-        <NavLink
-          to="/dashboard/postulaciones/crear"
-          className="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded-md flex items-center gap-2"
-        >
-          <RiAddCircleLine size={20} />
-          Crear Postulación
-        </NavLink>
-      </div>
 
       {/* Tabla de postulaciones */}
       <div className="overflow-x-auto bg-white rounded-lg shadow-md">

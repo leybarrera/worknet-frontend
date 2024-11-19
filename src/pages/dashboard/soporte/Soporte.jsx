@@ -1,5 +1,4 @@
-import { RiDeleteBin6Line, RiAddCircleLine } from 'react-icons/ri'
-import { NavLink } from 'react-router-dom'
+import { RiDeleteBin6Line } from 'react-icons/ri'
 
 const Soporte = () => {
   const tickets = [
@@ -36,17 +35,6 @@ const Soporte = () => {
   return (
     <section className="pl-[320px] p-8 w-full">
       <h2 className="text-2xl font-semibold mb-4">Soporte</h2>
-
-      {/* Botón para crear un nuevo ticket de soporte */}
-      <div className="mb-4">
-        <NavLink
-          to="/dashboard/soporte/crear"
-          className="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded-md flex items-center gap-2"
-        >
-          <RiAddCircleLine size={20} />
-          Crear Ticket de Soporte
-        </NavLink>
-      </div>
 
       {/* Tabla de tickets de soporte */}
       <div className="overflow-x-auto bg-white rounded-lg shadow-md">

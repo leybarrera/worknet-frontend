@@ -17,6 +17,7 @@ import {
   Postulaciones,
   Reportes,
   Soporte,
+  UserInfo,
 } from '../pages/dashboard'
 import EmpresaDashboard from '../layout/EmpresaDashboard.layout'
 import {
@@ -45,6 +46,10 @@ const AppRouter = () => {
         <Route path="/dashboard/postulaciones" element={<Postulaciones />} />
         <Route path="/dashboard/soporte" element={<Soporte />} />
         <Route path="/dashboard/reportes" element={<Reportes />} />
+        <Route
+          path="/dashboard/candidatos/user-info/:id"
+          element={<UserInfo />}
+        />
       </Route>
 
       <Route path="/empresa-dashboard" element={<EmpresaDashboard />}>

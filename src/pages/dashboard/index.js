@@ -5,6 +5,7 @@ import OfertasDeTrabajo from './ofertas/Ofertas'
 import Postulaciones from './postulaciones/Postulaciones'
 import Reportes from './reportes/Reportes'
 import Soporte from './soporte/Soporte'
+import UserInfo from './user-info/UserInfo'
 export {
   Inicio,
   Candidatos,
@@ -13,4 +14,5 @@ export {
   Postulaciones,
   Reportes,
   Soporte,
+  UserInfo,
 }

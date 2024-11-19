@@ -1,11 +1,33 @@
-import {
-  RiDeleteBin6Line,
-  RiAddCircleLine,
-  RiFileTextLine,
-} from 'react-icons/ri'
+import { useEffect, useState } from 'react'
+import { RiDeleteBin6Line, RiEyeFill, RiFileTextLine } from 'react-icons/ri'
+import { userEndpoints } from '../../../api/user/user.api'
 import { NavLink } from 'react-router-dom'
 
 const Candidatos = () => {
+  const [candidatos, setCandidatos] = useState([])
+
+  useEffect(() => {
+    userEndpoints
+      .getAll()
+      .then((res) => {
+        setCandidatos(res.data.users)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
+  const deleteUser = (id) => {
+    userEndpoints
+      .delete(id)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   const users = [
     {
       name: 'Edison',
@@ -52,17 +74,6 @@ const Candidatos = () => {
     <section className="pl-[320px] p-8 w-full">
       <h2 className="text-2xl font-semibold mb-4">Usuarios</h2>
 
-      {/* Botón para crear un nuevo usuario */}
-      <div className="mb-4">
-        <NavLink
-          to="/dashboard/usuarios/crear"
-          className="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded-md flex items-center gap-2"
-        >
-          <RiAddCircleLine size={20} />
-          Crear Usuario
-        </NavLink>
-      </div>
-
       {/* Tabla de usuarios */}
       <div className="overflow-x-auto bg-white rounded-lg shadow-md">
         <table className="min-w-full table-auto">
@@ -101,7 +112,7 @@ const Candidatos = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {candidatos.map((user, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm text-gray-700">{user.name}</td>
                 <td className="px-6 py-4 text-sm text-gray-700">
@@ -141,14 +152,20 @@ const Candidatos = () => {
                     <span className="text-gray-500">No disponible</span>
                   )}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700">
+                <td className="px-6 py-4 text-sm text-gray-700 gap-2 flex items-center">
                   {/* Botón para eliminar */}
                   <button
-                    onClick={() => alert(`Eliminar usuario ${user.name}`)}
+                    onClick={() => deleteUser(user.id)}
                     className="text-red-500 hover:text-red-700"
                   >
                     <RiDeleteBin6Line size={20} />
                   </button>
+                  <NavLink
+                    to={`/dashboard/candidatos/user-info/${user.id}`}
+                    className="text-blue-500 hover:text-blue-700"
+                  >
+                    <RiEyeFill size={20} />
+                  </NavLink>
                 </td>
               </tr>
             ))}
