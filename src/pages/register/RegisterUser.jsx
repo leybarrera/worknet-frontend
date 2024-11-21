@@ -12,7 +12,7 @@ import { FaLocationDot } from 'react-icons/fa6'
 import { userEndpoints } from '../../api/user/user.api'
 import { useProfile } from '../../hooks/index.hooks'
 
-const Register = () => {
+const RegisterUser = () => {
   const { user } = useProfile()
   const { profile_picture, ...infoUser } = user
   const [data, setData] = useState(infoUser)
@@ -182,26 +182,25 @@ const Register = () => {
                   </div>
                 </div>
               </div>
+
               <div className="flex flex-col gap-2">
                 <label
                   htmlFor=""
                   className="text-lg text-gray-500 font-semibold"
                 >
-                  Tipo
+                  Dirección
                 </label>
+
                 <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
-                  <select
-                    className="w-full px-4 py-3 text-gray-600 outline-none text-base bg-white"
-                    name="role"
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 text-gray-600 outline-none text-base"
+                    defaultValue={data.location}
+                    name="location"
                     onChange={handleChange}
-                    defaultValue={data.role}
-                  >
-                    <option value="Postulante">Postulante</option>
-                    <option value="Reclutador">Reclutador</option>
-                    <option value="Empresa">Empresa</option>
-                  </select>
+                  />
                   <div className="w-20 flex justify-center items-center">
-                    <FaIdCardAlt size={22} className="text-gray-400" />
+                    <FaLocationDot size={22} className="text-gray-400" />
                   </div>
                 </div>
               </div>
@@ -243,25 +242,6 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label htmlFor="" className="text-lg text-gray-500 font-semibold">
-                Dirección
-              </label>
-
-              <div className="flex w-full bg-white rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
-                <input
-                  type="text"
-                  className="w-full p-4 text-gray-600 outline-none text-base"
-                  defaultValue={data.location}
-                  name="location"
-                  onChange={handleChange}
-                />
-                <div className="w-20 flex justify-center items-center">
-                  <FaLocationDot size={22} className="text-gray-400" />
-                </div>
-              </div>
-            </div>
-
             <button
               type="submit"
               className="h-14 bg-[#00b4b7] text-white text-lg uppercase hover:bg-[#00b4b7]/80 transition-colors"
@@ -292,4 +272,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default RegisterUser

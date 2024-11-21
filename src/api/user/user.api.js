@@ -24,6 +24,13 @@ export const userEndpoints = {
     return instance.get(`/q?email=${email}`)
   },
 
+  getRecommendations: (token) => {
+    if (token)
+      return instance.get(`/users/recommendations/user-logged?token=${token}`)
+
+    return instance.get('/users/recommendations/user-not-logged')
+  },
+
   getOnlyValids: () => {
     return instance.get('/only/valids')
   },

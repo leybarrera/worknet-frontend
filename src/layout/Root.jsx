@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Nav } from '../components/index.components'
 import { ChatbotProvider } from '../context/ChatbotContext'
+import { useState } from 'react'
 
 const Root = () => {
   return (

@@ -9,10 +9,8 @@ const useProfile = () => {
     email: '',
     password: '',
     phone: '',
-    profile_picture: '',
     gender: '',
     location: '',
-    role: '',
   })
 
   useEffect(() => {

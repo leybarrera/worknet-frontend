@@ -35,7 +35,8 @@ const Login = () => {
               toast.success('Inicio de sesión exitoso')
               setTimeout(() => {
                 storageUtil.saveToLocalStorage('session_info', res.data)
-              }, 1500)
+                navigate('/') // Redirige al inicio después del login
+              }, 1500) // El retraso de 1.5 segundos para la redirección
             }
           })
           .catch((err) => {
@@ -144,7 +145,7 @@ const Login = () => {
         <p className="absolute bottom-8 text-sm text-gray-500">
           ¿Aún no tienes una cuenta?{' '}
           <Link
-            to="/registro"
+            to="/register_option"
             className="text-[#00b4b7] font-medium underline hover:text-[#009ea0] transition-all"
           >
             Regístrate aquí

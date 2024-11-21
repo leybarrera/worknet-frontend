@@ -3,11 +3,15 @@ import App from './App.jsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { VoiceProvider } from './context/VoiceContext.jsx'
+import { Provider } from 'react-redux'
+import { store } from './redux/store.js'
 
 createRoot(document.getElementById('root')).render(
-  <VoiceProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </VoiceProvider>
+  <Provider store={store}>
+    <VoiceProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </VoiceProvider>
+  </Provider>
 )

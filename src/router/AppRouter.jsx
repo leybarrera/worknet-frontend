@@ -4,9 +4,10 @@ import {
   Contact,
   Home,
   Login,
-  Register,
   JobDetails,
   Settings,
+  RegisterUser,
+  RegisterCompany,
 } from '../pages/index.pages'
 import Root from '../layout/Root'
 import DashboardLayout from '../layout/DashboardLayout'
@@ -24,12 +25,54 @@ import {
   OfertasEmpresa,
   PostulacionesCandidatos,
 } from '../pages/empresa-dashboard'
+import RegisterOption from '../pages/register/RegisterOption'
+import Activation from '../pages/activation/Activation'
+import ProtectedRoute from '../components/protected-route/ProtectedRoute'
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/inicio_sesion" element={<Login />} />
-      <Route path="/registro" element={<Register />} />
+      <Route
+        path="/inicio_sesion"
+        element={
+          <ProtectedRoute>
+            <Login />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/registro/usuario"
+        element={
+          <ProtectedRoute>
+            <RegisterUser />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/registro/empresa"
+        element={
+          <ProtectedRoute>
+            <RegisterCompany />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/register_option"
+        element={
+          <ProtectedRoute>
+            <RegisterOption />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/account-activation"
+        element={
+          <ProtectedRoute>
+            <Activation />
+          </ProtectedRoute>
+        }
+      />
+
       <Route path="/" element={<Root />}>
         <Route index element={<Home />} />
         <Route path="/aplicaciones" element={<Applications />} />
