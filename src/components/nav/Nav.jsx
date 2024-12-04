@@ -69,6 +69,13 @@ const Nav = () => {
         navigate('/mis_contactos')
       }
 
+      if (
+        transcript === 'postulaciones' ||
+        transcript === 'mis postulaciones'
+      ) {
+        navigate('/aplicaciones')
+      }
+
       if (transcript === 'inicio') {
         navigate('/')
       }

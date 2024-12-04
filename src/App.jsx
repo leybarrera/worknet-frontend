@@ -8,12 +8,16 @@ import { setUsers } from './redux/slices/users.slices'
 import { storageUtil } from './utils/index.utils'
 import { skillsEndpoints } from './api/skills/skills.api'
 import { setAllSkills } from './redux/slices/skills.slices'
+import { useNavigate } from 'react-router-dom'
 
 function App() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const session_info = storageUtil.getFromLocalStorage('session_info')
   useEffect(() => {
-    console.log(session_info)
+    if (!session_info) {
+      navigate('inicio_sesion')
+    }
     ofertasEndpoints
       .getAll()
       .then((res) => {
