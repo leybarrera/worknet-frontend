@@ -1,24 +1,26 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 import Aside from '../shared/Aside'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { storageUtil } from '../utils/index.utils'
+import AccesoDengado from '../pages/acceso-denegado/AccesoDengado'
 
 const DashboardLayout = () => {
+  const [showPage, setShowPage] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const { user } = storageUtil.getFromLocalStorage('session_info')
-    if (!user || user.role !== 'Administrador') {
-      navigate('/')
-    }
+    const isAdmin = storageUtil.getFromLocalStorage('is_admin')
+    setShowPage(isAdmin)
   }, [navigate])
-  return (
+  return showPage ? (
     <>
       <Aside />
       <main>
         <Outlet />
       </main>
     </>
+  ) : (
+    <AccesoDengado />
   )
 }
 

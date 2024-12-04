@@ -7,9 +7,16 @@ import {
   RiBarChartFill,
   RiAdminFill,
 } from 'react-icons/ri'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { storageUtil } from '../utils/index.utils'
 
 const Aside = () => {
+  const navigate = useNavigate()
+  const logout = () => {
+    storageUtil.removeStorage('session_info')
+    navigate('/inicio_sesion')
+  }
+
   return (
     <aside className="fixed w-[300px] h-full bg-[#007a7d] border-r border-gray-300">
       {/* Header section */}
@@ -109,10 +116,25 @@ const Aside = () => {
             <RiFileList3Fill size={20} />
             Reportes
           </NavLink>
+
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
+                : `px-8 py-5 text-gray-300 flex items-center gap-2 border-b border-gray-400 hover:text-white hover:bg-[#005b5c] transition-all duration-300`
+            }
+          >
+            <RiTeamFill size={20} />
+            Plataforma
+          </NavLink>
         </ul>
       </section>
 
-      <button className="absolute bottom-0 w-full flex justify-center items-center py-3 bg-[#005b5c] hover:bg-[#294949] transition-colors duration-300 text-white  hover:text-[#00e5e8] ">
+      <button
+        className="absolute bottom-0 w-full flex justify-center items-center py-3 bg-[#005b5c] hover:bg-[#294949] transition-colors duration-300 text-white  hover:text-[#00e5e8]"
+        onClick={logout}
+      >
         Cerrar sesión
       </button>
     </aside>

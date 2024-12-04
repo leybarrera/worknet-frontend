@@ -7,9 +7,12 @@ const EmpresaDashboard = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const { company } = storageUtil.getFromLocalStorage('session_info')
-    if (!company) {
-      navigate('/')
+    const storage = storageUtil.getFromLocalStorage('session_info')
+    if (storage.company) {
+      const { company } = JSON.parse(storage)
+      if (!company) {
+        navigate('/')
+      }
     }
   }, [navigate])
   return (

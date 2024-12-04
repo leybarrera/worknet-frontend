@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux'
 import { userEndpoints } from './api/user/user.api'
 import { setUsers } from './redux/slices/users.slices'
 import { storageUtil } from './utils/index.utils'
+import { skillsEndpoints } from './api/skills/skills.api'
+import { setAllSkills } from './redux/slices/skills.slices'
 
 function App() {
   const dispatch = useDispatch()
@@ -23,6 +25,14 @@ function App() {
       .getRecommendations(session_info && session_info.token)
       .then((res) => {
         dispatch(setUsers(res.data.users))
+      })
+      .catch((err) => console.log(err))
+
+    skillsEndpoints
+      .getAll()
+      .then((res) => {
+        const { code, skills } = res.data
+        dispatch(setAllSkills(skills))
       })
       .catch((err) => console.log(err))
   }, [dispatch, session_info])

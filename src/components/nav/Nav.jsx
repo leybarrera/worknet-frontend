@@ -3,6 +3,7 @@ import { AiFillMessage } from 'react-icons/ai'
 import { FaMicrophone } from 'react-icons/fa6'
 import { IoIosBriefcase, IoIosNotifications, IoMdLogOut } from 'react-icons/io'
 import {
+  RiAdminFill,
   RiHome5Fill,
   RiMenuFill,
   RiSearchLine,
@@ -11,10 +12,13 @@ import {
   RiUser3Fill,
 } from 'react-icons/ri'
 import { ChatbotContext } from '../../context/ChatbotContext'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { ProfileMenu, MessageMenu, NotificationMenu } from '../menu/index.menu'
+import { storageUtil } from '../../utils/index.utils'
 
 const Nav = () => {
+  const [currentUser, setCurrentUser] = useState({})
+  const navigate = useNavigate()
   const { setIsOpen, setInputText } = useContext(ChatbotContext)
   const [isListening, setIsListening] = useState(false) // Estado para controlar si está escuchando
   const [isOpenProfileMenu, setIsOpenProfileMenu] = useState(false)
@@ -59,6 +63,23 @@ const Nav = () => {
       // Comando para abrir el chatbot
       if (transcript === 'abrir chatbot') {
         setIsOpen(true)
+      }
+
+      if (transcript === 'contactos' || transcript === 'mis contactos') {
+        navigate('/mis_contactos')
+      }
+
+      if (transcript === 'inicio') {
+        navigate('/')
+      }
+
+      if (transcript === 'ajustes') {
+        navigate('/ajustes')
+      }
+
+      if (transcript === 'cerrar sesión') {
+        storageUtil.removeStorage('session_info')
+        navigate('/inicio_sesion')
       }
 
       // Comando para cerrar el chatbot
@@ -106,6 +127,14 @@ const Nav = () => {
     setIsOpenMessages(false)
   }
 
+  useEffect(() => {
+    const data = storageUtil.getFromLocalStorage('session_info')
+    if (data) {
+      const { user } = data
+      setCurrentUser(user)
+    }
+  }, [])
+
   return (
     <nav className="fixed top-0 left-0 w-full h-16 bg-[#00b4b7] shadow-md z-50">
       <div className="w-3/4 mx-auto h-full flex justify-between items-center">
@@ -142,11 +171,19 @@ const Nav = () => {
           {/* Navigation Icons */}
           <div className="flex gap-3">
             <NavLink
-              to={'/'}
+              to={currentUser.role === 'Candidato' ? '/' : '/empresa-home'}
               className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"
             >
               <RiHome5Fill size={20} className="text-[#00b4b7]" />
             </NavLink>
+            {currentUser.role === 'Administrador' && (
+              <NavLink
+                className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"
+                to={'/dashboard'}
+              >
+                <RiAdminFill size={20} className="text-[#00b4b7]" />
+              </NavLink>
+            )}
             <NavLink
               to={'/ofertas'}
               className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"

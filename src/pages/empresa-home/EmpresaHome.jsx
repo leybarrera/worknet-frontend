@@ -13,46 +13,13 @@ import { ChatbotContext } from '../../context/ChatbotContext'
 import { useSelector } from 'react-redux'
 import { storageUtil } from '../../utils/index.utils'
 
-const Home = () => {
+const EmpresaHome = () => {
   const [currentUser, setCurrentUser] = useState({})
   const { isOpen, inputText, setIsOpen, setInputText } =
     useContext(ChatbotContext)
 
   const { ofertas } = useSelector((state) => state.ofertas)
-  // const { users } = useSelector((state) => state.users)
-
-  const users = [
-    {
-      id: 1,
-      name: 'Juan Pérez',
-      role: 'Desarrollador Backend',
-      profilePicture: 'https://randomuser.me/api/portraits/men/1.jpg',
-    },
-    {
-      id: 2,
-      name: 'María López',
-      role: 'Diseñadora Gráfica',
-      profilePicture: 'https://randomuser.me/api/portraits/women/2.jpg',
-    },
-    {
-      id: 3,
-      name: 'Carlos Gómez',
-      role: 'Product Manager',
-      profilePicture: 'https://randomuser.me/api/portraits/men/3.jpg',
-    },
-    {
-      id: 4,
-      name: 'Ana Rodríguez',
-      role: 'Front-end Developer',
-      profilePicture: 'https://randomuser.me/api/portraits/women/4.jpg',
-    },
-    {
-      id: 5,
-      name: 'Pedro Martínez',
-      role: 'Desarrollador Full Stack',
-      profilePicture: 'https://randomuser.me/api/portraits/men/5.jpg',
-    },
-  ]
+  const { users } = useSelector((state) => state.users)
 
   useEffect(() => {
     const data = storageUtil.getFromLocalStorage('session_info')
@@ -79,9 +46,6 @@ const Home = () => {
             <h3 className="font-bold text-xl mt-4">
               {currentUser.name} {currentUser.surname}
             </h3>
-            <p className="text-sm text-gray-600">
-              Desarrollador Web Full Stack
-            </p>
           </header>
 
           {/* Additional Info */}
@@ -105,73 +69,44 @@ const Home = () => {
           {/* Navigation Links */}
           <nav className="px-6 py-4 border-t border-gray-200">
             {/* Primera opción */}
-            {currentUser.role === 'Candidato' && (
-              <NavLink
-                className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
-                to={'/aplicaciones'}
-              >
-                <FaClipboardList className="text-xl text-gray-700" />
-                <h4 className="text-base text-gray-800 font-medium">
-                  Mis postulaciones
-                </h4>
-                <div className="w-5 h-5 bg-[#00b4b7] rounded-full flex justify-center items-center ml-auto">
-                  <span className="text-white text-xs">4</span>
-                </div>
-              </NavLink>
-            )}
-
-            {/* Segunda opción */}
-            {currentUser.role === 'Candidato' && (
-              <NavLink
-                className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
-                to={'/mis_contactos'}
-              >
-                <FaUsers className="text-xl text-gray-700" />
-                <h4 className="text-base text-gray-800 font-medium">
-                  Mis contactos
-                </h4>
-                <div className="w-5 h-5 bg-[#00b4b7] rounded-full flex justify-center items-center ml-auto">
-                  <span className="text-white text-xs">4</span>
-                </div>
-              </NavLink>
-            )}
-
-            {/* Historial */}
             <NavLink
               className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
-              to={'/'}
+              to={'/aplicaciones'}
             >
+              <FaClipboardList className="text-xl text-gray-700" />
+              <h4 className="text-base text-gray-800 font-medium">
+                Mis ofertas
+              </h4>
+              <div className="w-5 h-5 bg-[#00b4b7] rounded-full flex justify-center items-center ml-auto">
+                <span className="text-white text-xs">4</span>
+              </div>
+            </NavLink>
+
+            {/* Historial */}
+            <NavLink className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3">
               <FaHistory className="text-xl text-gray-700" />
               <h4 className="text-base text-gray-800 font-medium">Historial</h4>
             </NavLink>
 
             {/* Configuración */}
-            {currentUser.role === 'Candidato' && (
-              <NavLink
-                className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
-                to={'/ajustes'}
-              >
-                <FaCog className="text-xl text-gray-700" />
-                <h4 className="text-base text-gray-800 font-medium">
-                  Configuración
-                </h4>
-              </NavLink>
-            )}
-
-            {/* Ayuda */}
             <NavLink
               className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
-              to={'/'}
+              to={'/ajustes'}
             >
+              <FaCog className="text-xl text-gray-700" />
+              <h4 className="text-base text-gray-800 font-medium">
+                Configuración
+              </h4>
+            </NavLink>
+
+            {/* Ayuda */}
+            <NavLink className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3">
               <FaQuestionCircle className="text-xl text-gray-700" />
               <h4 className="text-base text-gray-800 font-medium">Ayuda</h4>
             </NavLink>
 
             {/* Enviar sugerencia */}
-            <NavLink
-              className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
-              to={'/'}
-            >
+            <NavLink className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3">
               <FaPaperPlane className="text-xl text-gray-700" />
               <h4 className="text-base text-gray-800 font-medium">
                 Enviar sugerencia
@@ -226,11 +161,9 @@ const Home = () => {
                 </p>
                 <div className="flex justify-between items-center">
                   <p className="text-sm text-gray-500">Publicado hace 2 días</p>
-                  {currentUser.role === 'Candidato' && (
-                    <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
-                      Postularme
-                    </button>
-                  )}
+                  <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
+                    Postularme
+                  </button>
                 </div>
               </div>
 
@@ -256,11 +189,9 @@ const Home = () => {
                   <p className="text-sm text-gray-500">
                     Publicado hace 1 semana
                   </p>
-                  {currentUser.role === 'Candidato' && (
-                    <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
-                      Postularme
-                    </button>
-                  )}
+                  <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
+                    Postularme
+                  </button>
                 </div>
               </div>
 
@@ -284,69 +215,14 @@ const Home = () => {
                 </p>
                 <div className="flex justify-between items-center">
                   <p className="text-sm text-gray-500">Publicado hace 3 días</p>
-                  {currentUser.role === 'Candidato' && (
-                    <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
-                      Postularme
-                    </button>
-                  )}
+                  <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
+                    Postularme
+                  </button>
                 </div>
               </div>
             </div>
           )}
         </main>
-
-        <aside className="w-[350px] bg-white border border-gray-200 rounded-xl shadow-md p-6 max-h-auto h-fit">
-          {currentUser.role === 'Candidato' ? (
-            <h2 className="text-xl font-bold mb-4">Añadir a tu red</h2>
-          ) : (
-            <h2 className="text-xl font-bold mb-4">Buscan trabajo</h2>
-          )}
-
-          {/* Si no hay usuarios, mostramos el banner */}
-          {users.length === 0 ? (
-            <div className="flex items-center justify-center bg-[#e6fdfd] text-[#00b4b7] border border-[#00b4b7] rounded-lg p-4">
-              <p className="text-center text-sm font-semibold">
-                No hay recomendaciones disponibles
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {users.map((user) => (
-                <div
-                  key={user.id}
-                  className="flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={
-                        user.profilePicture ||
-                        'https://randomuser.me/api/portraits/men/32.jpg'
-                      } // Suponiendo que cada usuario tiene una imagen de perfil
-                      alt={`Perfil ${user.name}`}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div>
-                      <p className="text-sm font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-500">{user.role}</p>
-                    </div>
-                  </div>
-                  {currentUser.role === 'Candidato' && (
-                    <button className="px-4 py-1 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
-                      Seguir
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Texto para ver todas las recomendaciones */}
-          <div className="mt-4 text-center text-sm text-gray-500">
-            <p className="cursor-pointer text-[#00b4b7] hover:text-[#00a7a3] transition-colors">
-              Ver todas las recomendaciones
-            </p>
-          </div>
-        </aside>
       </div>
 
       {/* Chatbot button */}
@@ -405,4 +281,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default EmpresaHome

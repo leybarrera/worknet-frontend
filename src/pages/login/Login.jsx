@@ -31,12 +31,21 @@ const Login = () => {
         authEndpoints
           .login(data)
           .then((res) => {
+            console.log(res)
             if (res.status === 200) {
               toast.success('Inicio de sesión exitoso')
-              setTimeout(() => {
-                storageUtil.saveToLocalStorage('session_info', res.data)
-                navigate('/') // Redirige al inicio después del login
-              }, 1500) // El retraso de 1.5 segundos para la redirección
+              const { user } = res.data
+              storageUtil.saveToLocalStorage('session_info', res.data)
+              if (user.role === 'Administrador') {
+                storageUtil.saveToLocalStorage('is_admin', true)
+                setTimeout(() => {
+                  navigate('/dashboard')
+                }, 1500)
+              } else {
+                setTimeout(() => {
+                  navigate('/') // Redirige al inicio después del login
+                }, 1500) // El retraso de 1.5 segundos para la redirección
+              }
             }
           })
           .catch((err) => {

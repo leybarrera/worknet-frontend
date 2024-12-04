@@ -1,9 +1,19 @@
 import React from 'react'
 import { IoMdLogOut } from 'react-icons/io'
 import { RiSettings3Fill, RiUser3Fill } from 'react-icons/ri'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { storageUtil } from '../../utils/index.utils'
 
 const ProfileMenu = ({ closeAllMenus }) => {
+  const navigate = useNavigate()
+  const logout = () => {
+    closeAllMenus()
+    storageUtil.removeStorage('session_info')
+    setTimeout(() => {
+      navigate('/inicio_sesion')
+    }, 2500)
+  }
+
   return (
     <>
       <div className="absolute w-[250px] bg-white -left-[230px] rounded-lg border border-[#00b4b7] shadow-xl z-50">
@@ -30,13 +40,13 @@ const ProfileMenu = ({ closeAllMenus }) => {
           </li>
           {/* Logout Option */}
           <li>
-            <NavLink
-              to="/logout"
-              className="px-4 py-2 flex items-center gap-3 text-sm text-gray-700 hover:bg-[#f0f9f9] hover:text-[#00b4b7] rounded-md transition-all duration-300"
+            <button
+              className="px-4 py-2 flex items-center gap-3 text-sm text-gray-700 hover:bg-[#f0f9f9] hover:text-[#00b4b7] rounded-md transition-all duration-300 w-full"
+              onClick={logout}
             >
               <IoMdLogOut size={18} />
               Cerrar sesión
-            </NavLink>
+            </button>
           </li>
         </ul>
       </div>

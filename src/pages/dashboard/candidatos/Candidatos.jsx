@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react'
-import { RiDeleteBin6Line, RiEyeFill, RiFileTextLine } from 'react-icons/ri'
+import {
+  RiDeleteBin6Line,
+  RiEyeFill,
+  RiFileTextLine,
+  RiQrCodeLine,
+} from 'react-icons/ri'
 import { userEndpoints } from '../../../api/user/user.api'
 import { NavLink } from 'react-router-dom'
+import { resumeEndpoints } from '../../../api/resume/resume.api'
+import { QRCodeSVG } from 'qrcode.react'
 
 const Candidatos = () => {
   const [candidatos, setCandidatos] = useState([])
+  const [qrData, setQrData] = useState('')
+  const [showQr, setShowQr] = useState(false)
 
   useEffect(() => {
     userEndpoints
@@ -28,47 +37,12 @@ const Candidatos = () => {
       })
   }
 
-  const users = [
-    {
-      name: 'Edison',
-      surname: 'Barrera',
-      email: 'edison@example.com',
-      password: '********',
-      phone: '+123456789',
-      profile_picture: '/profile.png',
-      gender: 'Male',
-      location: 'La Maná',
-      role: 'Administrator',
-      isActive: true,
-      curriculum: '/curriculum_edison.pdf', // Enlace al archivo del currículum
-    },
-    {
-      name: 'Maria',
-      surname: 'Lopez',
-      email: 'maria@example.com',
-      password: '********',
-      phone: '+987654321',
-      profile_picture: '/profile2.png',
-      gender: 'Female',
-      location: 'La Maná',
-      role: 'Candidate',
-      isActive: false,
-      curriculum: '', // No tiene currículum
-    },
-    {
-      name: 'Juan',
-      surname: 'Perez',
-      email: 'juan@example.com',
-      password: '********',
-      phone: '+1122334455',
-      profile_picture: '/profile3.png',
-      gender: 'Male',
-      location: 'La Maná',
-      role: 'Candidate',
-      isActive: true,
-      curriculum: '', // No tiene currículum
-    },
-  ]
+  const generateQR = (url) => {
+    setQrData(url)
+    setShowQr(true)
+  }
+
+  const closeQr = () => setShowQr(false)
 
   return (
     <section className="pl-[320px] p-8 w-full">
@@ -143,11 +117,13 @@ const Candidatos = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700">
-                  {user.curriculum ? (
-                    <span className="flex items-center gap-1 text-blue-500 cursor-pointer">
-                      <RiFileTextLine size={18} />
-                      Ver
-                    </span>
+                  {user.Resume ? (
+                    <button
+                      onClick={() => generateQR(user.Resume.file_url)}
+                      className="text-green-500 hover:text-green-700"
+                    >
+                      <RiQrCodeLine size={20} />
+                    </button>
                   ) : (
                     <span className="text-gray-500">No disponible</span>
                   )}
@@ -172,6 +148,23 @@ const Candidatos = () => {
           </tbody>
         </table>
       </div>
+      {/* Modal para mostrar el QR */}
+      {showQr && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg text-center flex flex-col justify-center items-center">
+            <h3 className="text-lg font-semibold mb-4">
+              ESTO VALIDARÁ EL PERFIL DEL USUARIO
+            </h3>
+            <QRCodeSVG value={qrData} size={200} />
+            <button
+              onClick={closeQr}
+              className="mt-4 px-5 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

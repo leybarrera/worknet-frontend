@@ -7,4 +7,8 @@ const getFromLocalStorage = (key) => {
   return item ? JSON.parse(item) : null
 }
 
-export default { saveToLocalStorage, getFromLocalStorage }
+const removeStorage = (key) => {
+  localStorage.removeItem(key)
+}
+
+export default { saveToLocalStorage, getFromLocalStorage, removeStorage }

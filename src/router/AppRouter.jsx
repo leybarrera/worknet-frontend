@@ -28,6 +28,7 @@ import {
 import RegisterOption from '../pages/register/RegisterOption'
 import Activation from '../pages/activation/Activation'
 import ProtectedRoute from '../components/protected-route/ProtectedRoute'
+import EmpresaHome from '../pages/empresa-home/EmpresaHome'
 
 const AppRouter = () => {
   return (
@@ -75,6 +76,7 @@ const AppRouter = () => {
 
       <Route path="/" element={<Root />}>
         <Route index element={<Home />} />
+        <Route path="/empresa-inicio" element={<EmpresaHome />} />
         <Route path="/aplicaciones" element={<Applications />} />
         <Route path="/mis_contactos" element={<Contact />} />
         <Route path="/detalle_oferta" element={<JobDetails />} />

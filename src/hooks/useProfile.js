@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { storageUtil } from '../utils/index.utils'
 
 const useProfile = () => {
-  const data = storageUtil.getFromLocalStorage('session_info').user
+  const data = storageUtil.getFromLocalStorage('session_info')
   const [user, setUser] = useState({
     name: '',
     surname: '',
@@ -11,10 +11,13 @@ const useProfile = () => {
     phone: '',
     gender: '',
     location: '',
+    profile_picture: '',
   })
 
   useEffect(() => {
-    setUser(data)
+    if (data) {
+      setUser(data.user)
+    }
   }, [])
 
   const updateUser = (e) => {
@@ -25,7 +28,14 @@ const useProfile = () => {
     }))
   }
 
-  return { user, updateUser }
+  const updateProfilePicture = (imageUri) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      profile_picture: imageUri,
+    }))
+  }
+
+  return { user, updateUser, updateProfilePicture }
 }
 
 export default useProfile

@@ -8,6 +8,7 @@ const useSkill = () => {
 
   const updateSkill = (e) => {
     const { name, value } = e.target
+    console.log(name, value)
     setSkill((prevSkill) => ({
       ...prevSkill,
       [name]: value,
