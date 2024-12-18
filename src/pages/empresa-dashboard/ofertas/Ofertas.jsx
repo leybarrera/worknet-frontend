@@ -1,38 +1,53 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RiDeleteBin6Line, RiAddCircleLine, RiEdit2Line } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
+import AddJobOffer from '../../../components/modal/AddJobOffer'
+import { storageUtil } from '../../../utils/index.utils'
+import { Toaster, toast } from 'sonner'
+import { useDispatch, useSelector } from 'react-redux'
+import { offersAPI } from '../../../api/ofertas/ofertas.api'
+import { setOfertas } from '../../../redux/slices/ofertas.slices'
 
 const OfertasEmpresa = () => {
-  const [ofertas, setOfertas] = useState([
-    {
-      id: 1,
-      titulo: 'Desarrollador Frontend',
-      descripcion:
-        'Buscamos un desarrollador frontend con experiencia en React.',
-      fechaPublicacion: '10/11/2024',
-      estado: 'Activo',
-    },
-    {
-      id: 2,
-      titulo: 'Diseñador Gráfico',
-      descripcion:
-        'Se requiere un diseñador con experiencia en Adobe Photoshop y Illustrator.',
-      fechaPublicacion: '05/11/2024',
-      estado: 'Inactivo',
-    },
-    {
-      id: 3,
-      titulo: 'Gerente de Ventas',
-      descripcion:
-        'Buscamos un gerente con experiencia en ventas corporativas.',
-      fechaPublicacion: '01/11/2024',
-      estado: 'Activo',
-    },
-  ])
+  const [id, setId] = useState(null)
+  const dispatch = useDispatch()
+  const { ofertas } = useSelector((state) => state.ofertas)
+  const [showModal, setShowModal] = useState(false)
 
-  const handleDeleteOferta = (id) => {
-    setOfertas(ofertas.filter((oferta) => oferta.id !== id))
+  const toggleModal = () => setShowModal((prev) => !prev)
+
+  // const handleDeleteOferta = (id) => {
+  //   setOfertas(ofertas.filter((oferta) => oferta.id !== id))
+  // }
+
+  const successUpdate = async () => {
+    toast.success('Oferta creada con éxito')
+    await updateOffers()
   }
+  const errorUpdate = () => {
+    toast.error('Error al crear oferta')
+  }
+
+  const updateOffers = async () => {
+    offersAPI
+      .getByCompany(id)
+      .then((res) => {
+        const { jobOffers } = res.data
+        dispatch(setOfertas(jobOffers))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    const data = storageUtil.getFromLocalStorage('session_info')
+    if (data) {
+      const { company } = data
+      setId(company.id)
+      updateOffers()
+    }
+  }, [])
 
   return (
     <section className="w-full">
@@ -40,13 +55,13 @@ const OfertasEmpresa = () => {
 
       {/* Botón para agregar nueva oferta */}
       <div className="mb-4">
-        <Link
-          to="/dashboard/ofertas/nueva"
+        <button
           className="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded-md flex items-center gap-2"
+          onClick={toggleModal}
         >
           <RiAddCircleLine size={20} />
           Crear Oferta
-        </Link>
+        </button>
       </div>
 
       {/* Tabla de Ofertas */}
@@ -75,23 +90,20 @@ const OfertasEmpresa = () => {
             {ofertas.map((oferta) => (
               <tr key={oferta.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm text-gray-700">
-                  {oferta.titulo}
+                  {oferta.title}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700">
-                  {oferta.descripcion}
+                  {oferta.description}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700">
-                  {oferta.fechaPublicacion}
+                  {oferta.posted_at}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700">
                   <span
-                    className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                      oferta.estado === 'Activo'
-                        ? 'bg-green-200 text-green-800'
-                        : 'bg-red-200 text-red-800'
-                    }`}
+                    className="inline-block px-3 py-1 rounded-full text-xs font-semibold  bg-green-200 text-green-800
+                    "
                   >
-                    {oferta.estado}
+                    Activa
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700 flex gap-2">
@@ -116,6 +128,15 @@ const OfertasEmpresa = () => {
           </tbody>
         </table>
       </div>
+      {showModal && (
+        <AddJobOffer
+          toggleModal={toggleModal}
+          company_id={id}
+          success_update={successUpdate}
+          error_update={errorUpdate}
+        />
+      )}
+      <Toaster richColors />
     </section>
   )
 }

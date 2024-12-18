@@ -21,6 +21,8 @@ import {
 import { connectionAPI } from '../../api/connection/connection.api'
 import { userEndpoints } from '../../api/user/user.api'
 import { setUsers } from '../../redux/slices/users.slices'
+import { offersAPI } from '../../api/ofertas/ofertas.api'
+import { setOfertas } from '../../redux/slices/ofertas.slices'
 
 const Home = () => {
   const [hovered, setHovered] = useState(false)
@@ -70,6 +72,33 @@ const Home = () => {
       })
   }
 
+  const renderOffer = (offer) => {
+    return (
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-gray-100 transition-colors">
+        <div className="flex justify-between items-center mb-3">
+          <div>
+            <p className="text-lg font-semibold">{offer.title}</p>
+            <p className="text-sm text-gray-500">
+              Empresa ABC - Quito, Ecuador
+            </p>
+          </div>
+          <span className="text-xs text-[#00b4b7] bg-[#e6fdfd] px-2 py-1 rounded-full">
+            Urgente
+          </span>
+        </div>
+        <p className="text-gray-600 text-sm mb-4">{offer.description}</p>
+        <div className="flex justify-between items-center">
+          {/* <p className="text-sm text-gray-500">Publicado hace 2 días</p> */}
+          {currentUser.role === 'Candidato' && (
+            <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
+              Postularme
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   const getAllData = async () => {
     if (id !== null) {
       // Obtener todo de los usuarios
@@ -89,6 +118,16 @@ const Home = () => {
           const { connections } = res.data
           console.log(connections)
           dispatch(setContacts(connections))
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+      offersAPI
+        .getAll()
+        .then((res) => {
+          const { jobOffers } = res.data
+          dispatch(setOfertas(jobOffers))
         })
         .catch((err) => {
           console.log(err)
@@ -122,7 +161,7 @@ const Home = () => {
     <main className="relative w-full h-screen">
       <div className="flex gap-6">
         {/* Aside Left */}
-        <aside className="w-[350px] bg-white border border-[#00b4b7]/40 rounded-xl shadow-md">
+        <aside className="w-[350px] bg-white border border-[#00b4b7]/40 rounded-xl shadow-md h-fit">
           {/* Header */}
           <header className="flex flex-col items-center border-b border-[#00b4b7]/40 p-6">
             <div className="w-24 h-24 rounded-full bg-green-400 relative overflow-hidden">
@@ -239,17 +278,14 @@ const Home = () => {
         </aside>
 
         {/* Main */}
-        <main className="flex-1 max-h-auto h-fit bg-white border border-gray-200 rounded-xl shadow-md p-6">
+        <main className="flex-1 max-h-auto h-fit bg-white border border-gray-200 rounded-xl shadow-md p-6 mb-10">
           <h1 className="text-2xl font-bold mb-4">Ofertas de Trabajo</h1>
           <p className="text-gray-700 mb-2">
             Aquí puedes explorar las ofertas de trabajo disponibles.
           </p>
-          <p className="text-red-500 mb-6 text-sm">
-            Nota: Template de como ser verán las ofertas de trabajo.
-          </p>
 
           {/* Condicional para mostrar el banner si no hay ofertas */}
-          {ofertas.length !== 0 ? (
+          {ofertas.length === 0 ? (
             <div className="bg-[#e6fdfd] border border-[#00b4b7] rounded-xl p-6 text-center text-[#00b4b7]">
               <div className="mb-4">
                 <i className="fas fa-exclamation-triangle text-4xl text-[#00b4b7]"></i>
@@ -264,94 +300,7 @@ const Home = () => {
             </div>
           ) : (
             <div className="space-y-6">
-              {/* Oferta de trabajo 1 */}
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-gray-100 transition-colors">
-                <div className="flex justify-between items-center mb-3">
-                  <div>
-                    <p className="text-lg font-semibold">
-                      Desarrollador Full Stack
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Empresa ABC - Quito, Ecuador
-                    </p>
-                  </div>
-                  <span className="text-xs text-[#00b4b7] bg-[#e6fdfd] px-2 py-1 rounded-full">
-                    Urgente
-                  </span>
-                </div>
-                <p className="text-gray-600 text-sm mb-4">
-                  Se busca un desarrollador Full Stack con experiencia en React,
-                  Node.js y bases de datos SQL. La persona seleccionada será
-                  responsable de desarrollar nuevas características y mantener
-                  la plataforma actual.
-                </p>
-                <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-500">Publicado hace 2 días</p>
-                  {currentUser.role === 'Candidato' && (
-                    <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
-                      Postularme
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Oferta de trabajo 2 */}
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-gray-100 transition-colors">
-                <div className="flex justify-between items-center mb-3">
-                  <div>
-                    <p className="text-lg font-semibold">Diseñador UX/UI</p>
-                    <p className="text-sm text-gray-500">
-                      Empresa XYZ - Quito, Ecuador
-                    </p>
-                  </div>
-                  <span className="text-xs text-[#00b4b7] bg-[#e6fdfd] px-2 py-1 rounded-full">
-                    Nuevo
-                  </span>
-                </div>
-                <p className="text-gray-600 text-sm mb-4">
-                  Se busca diseñador UX/UI para trabajar en la mejora de la
-                  experiencia de usuario de nuestras aplicaciones web. Requiere
-                  experiencia en herramientas como Figma, Sketch, y Adobe XD.
-                </p>
-                <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-500">
-                    Publicado hace 1 semana
-                  </p>
-                  {currentUser.role === 'Candidato' && (
-                    <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
-                      Postularme
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Oferta de trabajo 3 */}
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-gray-100 transition-colors">
-                <div className="flex justify-between items-center mb-3">
-                  <div>
-                    <p className="text-lg font-semibold">Community Manager</p>
-                    <p className="text-sm text-gray-500">
-                      Empresa 123 - Guayaquil, Ecuador
-                    </p>
-                  </div>
-                  <span className="text-xs text-[#00b4b7] bg-[#e6fdfd] px-2 py-1 rounded-full">
-                    Destacado
-                  </span>
-                </div>
-                <p className="text-gray-600 text-sm mb-4">
-                  Buscamos un community manager para gestionar nuestras redes
-                  sociales. Es necesario tener experiencia en la creación de
-                  contenido y análisis de métricas.
-                </p>
-                <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-500">Publicado hace 3 días</p>
-                  {currentUser.role === 'Candidato' && (
-                    <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
-                      Postularme
-                    </button>
-                  )}
-                </div>
-              </div>
+              {ofertas.map((oferta) => renderOffer(oferta))}
             </div>
           )}
         </main>

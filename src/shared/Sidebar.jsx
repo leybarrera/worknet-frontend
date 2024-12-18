@@ -6,9 +6,18 @@ import {
   RiBarChartFill,
   RiSettings3Fill,
 } from 'react-icons/ri'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { storageUtil } from '../utils/index.utils'
 
 const Sidebar = () => {
+  const navigate = useNavigate()
+
+  const closeSession = () => {
+    storageUtil.removeStorage('session_info')
+    setTimeout(() => {
+      navigate('/inicio_sesion')
+    }, 1500)
+  }
   return (
     <aside className="fixed w-[300px] h-full bg-[#007a7d] border-r border-gray-300">
       {/* Header section */}
@@ -113,7 +122,10 @@ const Sidebar = () => {
       </section>
 
       {/* Botón de Cerrar sesión */}
-      <button className="absolute bottom-0 w-full flex justify-center items-center py-3 bg-[#005b5c] hover:bg-[#294949] transition-colors duration-300 text-white hover:text-[#00e5e8]">
+      <button
+        className="absolute bottom-0 w-full flex justify-center items-center py-3 bg-[#005b5c] hover:bg-[#294949] transition-colors duration-300 text-white hover:text-[#00e5e8]"
+        onClick={closeSession}
+      >
         Cerrar sesión
       </button>
     </aside>
