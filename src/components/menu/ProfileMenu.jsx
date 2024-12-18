@@ -1,9 +1,7 @@
-import React from 'react'
 import { IoMdLogOut } from 'react-icons/io'
 import { RiSettings3Fill, RiUser3Fill } from 'react-icons/ri'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { storageUtil } from '../../utils/index.utils'
-
 const ProfileMenu = ({ closeAllMenus }) => {
   const navigate = useNavigate()
   const logout = () => {

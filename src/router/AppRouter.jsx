@@ -29,6 +29,7 @@ import RegisterOption from '../pages/register/RegisterOption'
 import Activation from '../pages/activation/Activation'
 import ProtectedRoute from '../components/protected-route/ProtectedRoute'
 import EmpresaHome from '../pages/empresa-home/EmpresaHome'
+import Offers from '../pages/offers/Offers'
 
 const AppRouter = () => {
   return (
@@ -79,6 +80,7 @@ const AppRouter = () => {
         <Route path="/empresa-inicio" element={<EmpresaHome />} />
         <Route path="/aplicaciones" element={<Applications />} />
         <Route path="/mis_contactos" element={<Contact />} />
+        <Route path="/ofertas" element={<Offers />} />
         <Route path="/detalle_oferta" element={<JobDetails />} />
         <Route path="/ajustes" element={<Settings />} />
       </Route>

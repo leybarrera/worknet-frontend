@@ -8,6 +8,7 @@ const Language = ({
   addItem,
   languageList,
   setLanguageList,
+  saveLanguages,
 }) => {
   return (
     <div className="mb-6">
@@ -83,6 +84,12 @@ const Language = ({
           ))}
         </TransitionGroup>
       )}
+      <button
+        className="w-full py-3 font-semibold text-white bg-[#00b4b7] rounded-lg hover:bg-[#00b4b7]/90 transition"
+        onClick={saveLanguages}
+      >
+        Guardar cambios
+      </button>
     </div>
   )
 }

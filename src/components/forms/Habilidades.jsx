@@ -9,6 +9,7 @@ const Habilidades = ({
   setSkillsList,
   skill,
   getSkillName,
+  saveSkills,
 }) => {
   const { skills } = useSelector((state) => state.skills)
 
@@ -82,6 +83,12 @@ const Habilidades = ({
           ))}
         </TransitionGroup>
       )}
+      <button
+        className="w-full py-3 font-semibold text-white bg-[#00b4b7] rounded-lg hover:bg-[#00b4b7]/90 transition mt-3"
+        onClick={saveSkills}
+      >
+        Guardar cambios
+      </button>
     </div>
   )
 }

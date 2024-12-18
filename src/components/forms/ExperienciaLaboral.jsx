@@ -7,6 +7,7 @@ const ExperienciaLaboral = ({
   addItem,
   experienceList,
   setExperienceList,
+  saveWorkExperience,
 }) => {
   return (
     <div className="mb-6">
@@ -79,6 +80,12 @@ const ExperienciaLaboral = ({
           </CSSTransition>
         ))}
       </TransitionGroup>
+      <button
+        className="w-full py-3 font-semibold text-white bg-[#00b4b7] rounded-lg hover:bg-[#00b4b7]/90 transition"
+        onClick={saveWorkExperience}
+      >
+        Guardar cambios
+      </button>
     </div>
   )
 }

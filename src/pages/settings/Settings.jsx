@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RiCameraFill, RiUploadCloudFill } from 'react-icons/ri'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { TransitionGroup } from 'react-transition-group'
 import './Settings.css' // Estilos para animaciones
 import {
   useEducation,
@@ -16,13 +16,31 @@ import ExperienciaLaboral from '../../components/forms/ExperienciaLaboral'
 import Habilidades from '../../components/forms/Habilidades'
 import Language from '../../components/forms/Language'
 import Referencias from '../../components/forms/Referencias'
-import { userEndpoints } from '../../api/user/user.api'
 import { settingsEndpoint } from '../../api/settings/settings.api'
-import { storageUtil } from '../../utils/index.utils'
 import { toast, Toaster } from 'sonner'
 import { useNavigate } from 'react-router-dom'
+import Loader from '../../components/loader/Loader'
+import { userEndpoints } from '../../api/user/user.api'
+import NotificationModal from '../../components/modal/NotificationModal'
 
 const Settings = () => {
+  const [profileCompleted, setProfileCompleted] = useState(false)
+  // Prra trabajar con la barra de profeso de configuracion
+  const [completedSections, setCompletedSections] = useState(1)
+  const [widthBar, setWidthBar] = useState(
+    Math.floor((completedSections / 7) * 100)
+  )
+
+  const widthBarCalc = () => {
+    const newWidth = Math.floor((completedSections / 7) * 100)
+    setWidthBar((prev) => newWidth)
+  }
+
+  const completeSection = () => {
+    setCompletedSections((prev) => prev + 1)
+  }
+
+  const [isMounted, setIsMounted] = useState(false)
   const [imageUri, setImageUri] = useState(null)
   const [image, setImage] = useState(null)
   const { skills } = useSelector((state) => state.skills)
@@ -59,6 +77,8 @@ const Settings = () => {
   const [resumeUri, setResumeUri] = useState(null)
   const [error, setError] = useState('')
 
+  const navigate = useNavigate()
+
   const handleResumeChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -78,28 +98,10 @@ const Settings = () => {
     }
   }
 
-  const handleSave = () => {
-    if (!resume) {
-      setError('Por favor, seleccione un curriculum para guardar.')
-      return
-    }
-    setResumeUri(resume)
-    setResume(null)
-  }
-
   const handleCancel = () => {
     setResume(null)
     setResumeUri(null)
     setError('')
-  }
-
-  const navigate = useNavigate()
-
-  const handleDelete = () => {}
-
-  // Función para ver el currículum (solo como ejemplo, puedes agregar funcionalidad real)
-  const handleView = () => {
-    alert('Ver currículum: funcionalidad a implementar')
   }
 
   const addItem = (list, setList, item, resetItem) => {
@@ -109,61 +111,136 @@ const Settings = () => {
     resetItem()
   }
 
-  const createFormData = () => {
+  const saveInfoUser = async () => {
     const formData = new FormData()
-
-    // Agregar los datos al FormData
     formData.append('user_info', JSON.stringify(user))
-    formData.append('education', JSON.stringify(educationList))
-    formData.append('experience', JSON.stringify(experienceList))
-    formData.append('skills', JSON.stringify(skillsList))
-    formData.append('language', JSON.stringify(languageList))
-    formData.append('references', JSON.stringify(referencesList))
-    formData.append('resume', resumeUri) // Agregar el archivo resume (File o Blob)
-    formData.append('image', image) // Agregar la imagen (File o Blob)
 
-    return formData
-    // Imprimir los datos en la consola
-    // for (const [key, value] of formData.entries()) {
-    //   // Si el valor es un archivo (File o Blob), mostramos detalles como el nombre
-    //   if (value instanceof File) {
-    //     console.log(`${key}: ${value.name}, ${value.size} bytes, ${value.type}`)
-    //   } else if (
-    //     key !== 'resume' &&
-    //     key !== 'image' &&
-    //     value &&
-    //     value.startsWith('{')
-    //   ) {
-    //     // Si es un string que parece JSON, tratamos de parsearlo
-    //     try {
-    //       console.log(key, JSON.parse(value))
-    //     } catch (e) {
-    //       console.log(key, value) // Si no es un JSON válido, lo mostramos tal cual
-    //     }
-    //   } else {
-    //     console.log(key, value) // Para otros casos
-    //   }
-    // }
-  }
-
-  const handleSubmit = async () => {
-    const data = createFormData()
-    settingsEndpoint
-      .saveSettings(data, user.id)
+    userEndpoints
+      .saveInfoUser(user.id, formData)
       .then((res) => {
-        toast.success('Configuración guardada con éxito')
-        setTimeout(() => {
-          navigate('/')
-        }, 1500)
+        const { message } = res.data
+        toast.success(message)
+        setCompletedSections((prev) => prev + 1)
       })
       .catch((err) => {
-        console.log(err)
+        const { message } = err.response.data
+        toast.error(message)
+      })
+  }
+  const saveResume = async () => {
+    const formData = new FormData()
+    formData.append('resume', resumeUri)
+    userEndpoints
+      .saveResume(user.id, formData)
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        setCompletedSections((prev) => prev + 1)
+      })
+      .catch((err) => {
+        const { message } = err.response.data
+        toast.error(message)
+      })
+  }
+  const saveEducation = async () => {
+    userEndpoints
+      .saveEducation(user.id, educationList)
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        setCompletedSections((prev) => prev + 1)
+      })
+      .catch((err) => {
+        const { message } = err.response.data
+        toast.error(message)
+      })
+  }
+  const saveWorkExperience = async () => {
+    userEndpoints
+      .saveExperience(user.id, experienceList)
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        setCompletedSections((prev) => prev + 1)
+      })
+      .catch((err) => {
+        const { message } = err.response.data
+        toast.error(message)
+      })
+  }
+  const saveSkills = async () => {
+    userEndpoints
+      .saveSkills(user.id, skillsList)
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        setCompletedSections((prev) => prev + 1)
+      })
+      .catch((err) => {
+        const { message } = err.response.data
+        toast.error(message)
+      })
+  }
+  const saveLanguages = async () => {
+    userEndpoints
+      .saveLanguages(user.id, languageList)
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        setCompletedSections((prev) => prev + 1)
+      })
+      .catch((err) => {
+        const { message } = err.response.data
+        toast.error(message)
+      })
+  }
+  const saveReferences = async () => {
+    userEndpoints
+      .saveReferences(user.id, referencesList)
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        setCompletedSections((prev) => prev + 1)
+      })
+      .catch((err) => {
+        const { message } = err.response.data
+        toast.error(message)
       })
   }
 
   const getSkillName = (id) => skills.find((skill) => skill.id === id)?.name
 
-  return (
+  useEffect(() => {
+    setTimeout(() => {
+      setIsMounted(true)
+    }, 3500)
+  }, [])
+
+  useEffect(() => {
+    if (profileCompleted) {
+      setTimeout(() => {
+        navigate('/')
+      }, 2500)
+    }
+  }, [profileCompleted])
+
+  useEffect(() => {
+    if (widthBar >= 100) {
+      setTimeout(() => {
+        setProfileCompleted(true)
+      }, 2500)
+    }
+  }, [widthBar])
+
+  useEffect(() => {
+    widthBarCalc()
+  }, [completedSections])
+
+  if (!isMounted) return <Loader text={'Cargando configuración...'} />
+
+  return profileCompleted ? (
+    <NotificationModal />
+  ) : (
     <div className="w-3/4 mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-3xl font-semibold text-center text-[#333333]">
         Configuración de Cuenta
@@ -176,11 +253,11 @@ const Settings = () => {
         </h2>
         <div className="h-2 bg-gray-200 rounded-full">
           <div
-            className="h-full bg-[#00b4b7]"
-            style={{ width: `${10}%` }}
+            className="h-full bg-[#00b4b7] transition-all duration-300 ease-in-out"
+            style={{ width: `${widthBar}%` }}
           ></div>
         </div>
-        <p className="text-sm text-[#666] mt-2">{10}% completado</p>
+        <p className="text-sm text-[#666] mt-2">{widthBar}% completado</p>
       </div>
 
       {/* Datos personales */}
@@ -306,6 +383,14 @@ const Settings = () => {
               />
             </div>
           </div>
+
+          {/* Botón */}
+          <button
+            className="w-full py-3 font-semibold text-white bg-[#00b4b7] rounded-lg hover:bg-[#00b4b7]/90 transition"
+            onClick={saveInfoUser}
+          >
+            Guardar cambios
+          </button>
         </div>
       </div>
 
@@ -365,76 +450,12 @@ const Settings = () => {
                 Cancelar
               </button>
               <button
-                onClick={handleSave}
+                onClick={saveResume}
                 className="px-6 py-3 bg-[#00b4b7] text-white font-semibold rounded-lg hover:bg-[#008d90] transition duration-200"
               >
                 Guardar Currículum
               </button>
             </div>
-
-            <TransitionGroup className="mt-4">
-              {resumeUri ? (
-                <div className="mt-6">
-                  <h4 className="font-semibold text-lg">
-                    Detalles del archivo:
-                  </h4>
-                  <table className="min-w-full mt-2 border-collapse">
-                    <thead>
-                      <tr>
-                        <th className="px-4 py-2 text-left border border-gray-300">
-                          Nombre del archivo
-                        </th>
-                        <th className="px-4 py-2 text-left border border-gray-300">
-                          Formato
-                        </th>
-                        <th className="px-4 py-2 text-left border border-gray-300">
-                          Tamaño
-                        </th>
-                        <th className="px-4 py-2 text-left border border-gray-300">
-                          Acciones
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="px-4 py-2 border border-gray-300">
-                          {resumeUri.name}
-                        </td>
-                        <td className="px-4 py-2 border border-gray-300">
-                          {resumeUri.type}
-                        </td>
-                        <td className="px-4 py-2 border border-gray-300">
-                          {resumeUri.size / 1024 > 1024
-                            ? (resumeUri.size / (1024 * 1024)).toFixed(2) +
-                              ' MB'
-                            : (resumeUri.size / 1024).toFixed(2) + ' KB'}
-                        </td>
-                        <td className="px-4 py-2 border border-gray-300">
-                          <button
-                            onClick={handleView}
-                            className="text-blue-500 hover:text-blue-700 mr-2"
-                          >
-                            Ver
-                          </button>
-                          <button
-                            onClick={() => {
-                              setResumeUri(null)
-                            }}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            Eliminar
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p className="text-sm text-gray-500 mt-4">
-                  No has subido ningún currículum todavía.
-                </p>
-              )}
-            </TransitionGroup>
           </div>
         </div>
       </div>
@@ -446,6 +467,7 @@ const Settings = () => {
         addItem={addItem}
         educationList={educationList}
         setEducationList={setEducationList}
+        saveEducation={saveEducation}
       />
 
       {/* Experiencia Laboral */}
@@ -455,6 +477,7 @@ const Settings = () => {
         addItem={addItem}
         experienceList={experienceList}
         setExperienceList={setExperienceList}
+        saveWorkExperience={saveWorkExperience}
       />
 
       {/* Habilidades  */}
@@ -465,6 +488,7 @@ const Settings = () => {
         setSkillsList={setSkillsList}
         skill={skill}
         getSkillName={getSkillName}
+        saveSkills={saveSkills}
       />
 
       {/* Idiomas */}
@@ -474,6 +498,7 @@ const Settings = () => {
         updateLanguage={updateLanguage}
         languageList={languageList}
         setLanguageList={setLanguageList}
+        saveLanguages={saveLanguages}
       />
 
       {/* Referencias */}
@@ -483,15 +508,8 @@ const Settings = () => {
         updateReference={updateReference}
         referencesList={referencesList}
         setReferencesList={setReferencesList}
+        saveReferences={saveReferences}
       />
-
-      <button
-        className="px-5 py-3 text-lg text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors w-full"
-        onClick={handleSubmit}
-      >
-        Guardar cambios
-      </button>
-
       <Toaster richColors />
     </div>
   )

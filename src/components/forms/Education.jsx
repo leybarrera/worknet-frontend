@@ -7,6 +7,7 @@ const Education = ({
   addItem,
   educationList,
   setEducationList,
+  saveEducation,
 }) => {
   return (
     <div className="mb-6">
@@ -97,6 +98,13 @@ const Education = ({
           </CSSTransition>
         ))}
       </TransitionGroup>
+
+      <button
+        className="w-full py-3 font-semibold text-white bg-[#00b4b7] rounded-lg hover:bg-[#00b4b7]/90 transition"
+        onClick={saveEducation}
+      >
+        Guardar cambios
+      </button>
     </div>
   )
 }

@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import AppRouter from './router/AppRouter'
-import { ofertasEndpoints } from './api/ofertas/ofertas.api'
 import { setOfertas } from './redux/slices/ofertas.slices'
 import { useDispatch } from 'react-redux'
 import { userEndpoints } from './api/user/user.api'
@@ -9,6 +8,7 @@ import { storageUtil } from './utils/index.utils'
 import { skillsEndpoints } from './api/skills/skills.api'
 import { setAllSkills } from './redux/slices/skills.slices'
 import { useNavigate } from 'react-router-dom'
+import { offersAPI } from './api/ofertas/ofertas.api'
 
 function App() {
   const dispatch = useDispatch()
@@ -18,7 +18,7 @@ function App() {
     if (!session_info) {
       navigate('inicio_sesion')
     }
-    ofertasEndpoints
+    offersAPI
       .getAll()
       .then((res) => {
         dispatch(setOfertas(res.data.jobOffers))

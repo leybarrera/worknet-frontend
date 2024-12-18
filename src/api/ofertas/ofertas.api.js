@@ -2,7 +2,7 @@ import { instance } from '../base.api'
 
 const model = 'job-offers'
 
-export const ofertasEndpoints = {
+export const offersAPI = {
   getAll: () => {
     return instance.get(`/${model}`)
   },

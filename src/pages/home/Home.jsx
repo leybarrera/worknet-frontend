@@ -1,8 +1,7 @@
 import { VscRobot } from 'react-icons/vsc'
 import { useContext, useEffect, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import {
-  FaChessKing,
   FaClipboardList,
   FaCog,
   FaHistory,
@@ -10,56 +9,113 @@ import {
 } from 'react-icons/fa'
 import { FaPaperPlane, FaUsers } from 'react-icons/fa6'
 import { ChatbotContext } from '../../context/ChatbotContext'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { storageUtil } from '../../utils/index.utils'
+import Chatbot from '../../components/chatbot/Chatbot'
+import { toast, Toaster } from 'sonner'
+import { applicationsAPI } from '../../api/applications/applications.api'
+import {
+  setApplications,
+  setContacts,
+} from '../../redux/slices/applicants.slice'
+import { connectionAPI } from '../../api/connection/connection.api'
+import { userEndpoints } from '../../api/user/user.api'
+import { setUsers } from '../../redux/slices/users.slices'
 
 const Home = () => {
+  const [hovered, setHovered] = useState(false)
+
+  const { applications, contacts } = useSelector((state) => state.applicants)
+  const { users } = useSelector((state) => state.users)
+  const dispatch = useDispatch()
+  const [id, setId] = useState(null)
   const [currentUser, setCurrentUser] = useState({})
-  const { isOpen, inputText, setIsOpen, setInputText } =
-    useContext(ChatbotContext)
-
+  const { isOpen, setIsOpen } = useContext(ChatbotContext)
   const { ofertas } = useSelector((state) => state.ofertas)
-  // const { users } = useSelector((state) => state.users)
 
-  const users = [
-    {
-      id: 1,
-      name: 'Juan Pérez',
-      role: 'Desarrollador Backend',
-      profilePicture: 'https://randomuser.me/api/portraits/men/1.jpg',
-    },
-    {
-      id: 2,
-      name: 'María López',
-      role: 'Diseñadora Gráfica',
-      profilePicture: 'https://randomuser.me/api/portraits/women/2.jpg',
-    },
-    {
-      id: 3,
-      name: 'Carlos Gómez',
-      role: 'Product Manager',
-      profilePicture: 'https://randomuser.me/api/portraits/men/3.jpg',
-    },
-    {
-      id: 4,
-      name: 'Ana Rodríguez',
-      role: 'Front-end Developer',
-      profilePicture: 'https://randomuser.me/api/portraits/women/4.jpg',
-    },
-    {
-      id: 5,
-      name: 'Pedro Martínez',
-      role: 'Desarrollador Full Stack',
-      profilePicture: 'https://randomuser.me/api/portraits/men/5.jpg',
-    },
-  ]
+  const isFollowing = (id) => {
+    const contactsID = contacts.map((contact) => contact.UserTargetId)
+    return contactsID.includes(id)
+  }
+
+  const followUser = (user_id) => {
+    const UserSourceId = id
+    const UserTargetId = user_id
+
+    connectionAPI
+      .sendConnection({ UserSourceId, UserTargetId })
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        getAllData()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const unfollowUser = (user_id) => {
+    const UserSourceId = id
+    const UserTargetId = user_id
+
+    connectionAPI
+      .removeConnection({ UserSourceId, UserTargetId })
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        getAllData()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const getAllData = async () => {
+    if (id !== null) {
+      // Obtener todo de los usuarios
+      applicationsAPI
+        .getByUser(id)
+        .then((res) => {
+          const { jobApplications } = res.data
+          dispatch(setApplications(jobApplications))
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+      connectionAPI
+        .getByUser(id)
+        .then((res) => {
+          const { connections } = res.data
+          console.log(connections)
+          dispatch(setContacts(connections))
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+      userEndpoints
+        .getOtherUsers(id)
+        .then((res) => {
+          const { users } = res.data
+          dispatch(setUsers(users))
+        })
+        .catch((err) => {
+          console.log(err.message)
+        })
+    }
+  }
+
+  useEffect(() => {
+    getAllData()
+  }, [dispatch, id])
 
   useEffect(() => {
     const data = storageUtil.getFromLocalStorage('session_info')
     if (data) {
       const { user } = data
-      console.log(user)
       setCurrentUser(user)
+      setId(user.id)
     }
   }, [])
   return (
@@ -115,7 +171,9 @@ const Home = () => {
                   Mis postulaciones
                 </h4>
                 <div className="w-5 h-5 bg-[#00b4b7] rounded-full flex justify-center items-center ml-auto">
-                  <span className="text-white text-xs">4</span>
+                  <span className="text-white text-xs">
+                    {applications.length}
+                  </span>
                 </div>
               </NavLink>
             )}
@@ -131,7 +189,7 @@ const Home = () => {
                   Mis contactos
                 </h4>
                 <div className="w-5 h-5 bg-[#00b4b7] rounded-full flex justify-center items-center ml-auto">
-                  <span className="text-white text-xs">4</span>
+                  <span className="text-white text-xs">{contacts.length}</span>
                 </div>
               </NavLink>
             )}
@@ -330,8 +388,24 @@ const Home = () => {
                       <p className="text-xs text-gray-500">{user.role}</p>
                     </div>
                   </div>
-                  {currentUser.role === 'Candidato' && (
-                    <button className="px-4 py-1 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
+                  {isFollowing(user.id) ? (
+                    <button
+                      className={`px-4 py-1 text-sm   rounded-md  transition-all  ${
+                        hovered
+                          ? 'bg-[#f00] text-white'
+                          : 'bg-gray-300 text-gray-600'
+                      }`}
+                      onMouseEnter={() => setHovered(true)}
+                      onMouseLeave={() => setHovered(false)}
+                      onClick={() => unfollowUser(user.id)}
+                    >
+                      {hovered ? 'Dejar de seguir' : 'Siguiendo'}
+                    </button>
+                  ) : (
+                    <button
+                      className="px-4 py-1 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors"
+                      onClick={() => followUser(user.id)}
+                    >
                       Seguir
                     </button>
                   )}
@@ -341,11 +415,14 @@ const Home = () => {
           )}
 
           {/* Texto para ver todas las recomendaciones */}
-          <div className="mt-4 text-center text-sm text-gray-500">
-            <p className="cursor-pointer text-[#00b4b7] hover:text-[#00a7a3] transition-colors">
-              Ver todas las recomendaciones
-            </p>
-          </div>
+
+          {users.length > 5 && (
+            <div className="mt-4 text-center text-sm text-gray-500">
+              <p className="cursor-pointer text-[#00b4b7] hover:text-[#00a7a3] transition-colors">
+                Ver todas las recomendaciones
+              </p>
+            </div>
+          )}
         </aside>
       </div>
 
@@ -357,50 +434,8 @@ const Home = () => {
         <VscRobot className="text-white" size={37} />
       </button>
 
-      {isOpen && (
-        <div className="fixed bottom-16 right-4 w-80 h-96 bg-white border border-gray-300 rounded-lg shadow-lg animate-slide-up flex flex-col">
-          {/* Encabezado del Chatbot */}
-          <div className="bg-blue-500 text-white p-3 rounded-t-lg flex justify-between items-center">
-            <span className="font-bold">Chatbot</span>
-            <button
-              onClick={setIsOpen}
-              className="text-white hover:text-gray-200"
-              aria-label="Cerrar chatbot"
-            >
-              ✖
-            </button>
-          </div>
-
-          {/* Contenedor de Mensajes con Scroll */}
-          <div className="flex-1 p-4 space-y-3 overflow-y-auto">
-            {/* Mensaje del Bot */}
-            <div className="bg-gray-100 p-3 rounded-md shadow-sm text-sm">
-              👋 ¡Hola! ¿En qué puedo ayudarte?
-            </div>
-            {/* Respuesta del Usuario */}
-            <div className="bg-blue-500 text-white p-3 rounded-md shadow-sm text-sm self-end">
-              ¿Qué servicios ofreces?
-            </div>
-            {/* Respuesta del Bot */}
-            <div className="bg-gray-100 p-3 rounded-md shadow-sm text-sm">
-              Ofrezco ayuda en consultas generales y soporte técnico. 😊
-            </div>
-          </div>
-
-          {/* Input del Chat */}
-          <div className="p-3 border-t border-gray-200 flex items-center">
-            <input
-              type="text"
-              placeholder="Escribe un mensaje..."
-              className="flex-1 px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
-              defaultValue={inputText}
-            />
-            <button className="ml-2 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition-all">
-              ➤
-            </button>
-          </div>
-        </div>
-      )}
+      <Toaster richColors />
+      {isOpen && <Chatbot setIsOpen={setIsOpen} />}
     </main>
   )
 }

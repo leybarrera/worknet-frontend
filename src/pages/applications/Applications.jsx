@@ -1,4 +1,16 @@
+import { useEffect, useState } from 'react'
+import Loader from '../../components/loader/Loader'
+
 const Applications = () => {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsMounted(true)
+    }, 3500)
+  }, [])
+
+  if (!isMounted) return <Loader text={'Cargando postulaciones...'} />
   return (
     <main className="flex-1 max-w-4xl mx-auto bg-white border border-gray-200 rounded-xl shadow-md p-6">
       <h1 className="text-2xl font-bold mb-4">Mis Postulaciones</h1>

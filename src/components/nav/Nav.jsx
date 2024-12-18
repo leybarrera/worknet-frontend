@@ -7,9 +7,7 @@ import {
   RiHome5Fill,
   RiMenuFill,
   RiSearchLine,
-  RiSettings3Fill,
-  RiSettings3Line,
-  RiUser3Fill,
+  RiMic2Fill,
 } from 'react-icons/ri'
 import { ChatbotContext } from '../../context/ChatbotContext'
 import { NavLink, useNavigate } from 'react-router-dom'
@@ -169,7 +167,7 @@ const Nav = () => {
             className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"
             onClick={toggleListening}
           >
-            <FaMicrophone className="text-[#00b4b7]" size={18} />
+            <RiMic2Fill className="text-[#00b4b7]" size={18} />
           </button>
         </div>
 

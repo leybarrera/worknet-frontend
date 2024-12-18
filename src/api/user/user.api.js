@@ -20,6 +20,10 @@ export const userEndpoints = {
     return instance.get(`/users/s/${id}`)
   },
 
+  getOtherUsers: (id) => {
+    return instance.get(`/users/others/${id}`)
+  },
+
   getByEmail: (email) => {
     return instance.get(`/q?email=${email}`)
   },
@@ -37,6 +41,36 @@ export const userEndpoints = {
 
   getOnlyActives: () => {
     return instance.get('/only/actives')
+  },
+
+  // Saves
+  saveInfoUser: (id, data) => {
+    return instance.put(`/users/${id}`, data)
+  },
+
+  saveResume: (id, data) => {
+    return instance.put(`/users/${id}/resume`, data)
+  },
+
+  saveEducation: (id, data) => {
+    console.log(id, data)
+    return instance.put(`/users/${id}/education`, data)
+  },
+
+  saveExperience: (id, data) => {
+    return instance.put(`/users/${id}/experience`, data)
+  },
+
+  saveSkills: (id, data) => {
+    return instance.put(`/users/${id}/skills`, data)
+  },
+
+  saveLanguages: (id, data) => {
+    return instance.put(`/users/${id}/languages`, data)
+  },
+
+  saveReferences: (id, data) => {
+    return instance.put(`/users/${id}/references`, data)
   },
 
   recoveryUser: (id) => {
