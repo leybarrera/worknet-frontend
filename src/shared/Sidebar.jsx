@@ -43,7 +43,8 @@ const Sidebar = () => {
         <ul>
           {/* Gestionar Empresa */}
           <NavLink
-            to="/empresa-dashboard/gestionar"
+            // to="/empresa-dashboard/gestionar"
+            to="/empresa-dashboard/ofertas"
             className={({ isActive }) =>
               isActive
                 ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
@@ -69,7 +70,8 @@ const Sidebar = () => {
 
           {/* Postulaciones */}
           <NavLink
-            to="/empresa-dashboard/postulaciones"
+            // to="/empresa-dashboard/postulaciones"
+            to="/empresa-dashboard/ofertas"
             className={({ isActive }) =>
               isActive
                 ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
@@ -82,7 +84,8 @@ const Sidebar = () => {
 
           {/* Reportes */}
           <NavLink
-            to="/empresa-dashboard/reportes"
+            // to="/empresa-dashboard/reportes"
+            to="/empresa-dashboard/ofertas"
             className={({ isActive }) =>
               isActive
                 ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
@@ -95,7 +98,8 @@ const Sidebar = () => {
 
           {/* Configuración */}
           <NavLink
-            to="/empresa-dashboard/configuracion"
+            // to="/empresa-dashboard/configuracion"
+            to="/empresa-dashboard/ofertas"
             className={({ isActive }) =>
               isActive
                 ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
@@ -108,7 +112,8 @@ const Sidebar = () => {
 
           {/* Soporte */}
           <NavLink
-            to="/empresa-dashboard/soporte"
+            // to="/empresa-dashboard/soporte"
+            to="/empresa-dashboard/ofertas"
             className={({ isActive }) =>
               isActive
                 ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
