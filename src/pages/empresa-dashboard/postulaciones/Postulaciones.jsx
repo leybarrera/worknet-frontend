@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RiDeleteBin6Line, RiEdit2Line } from 'react-icons/ri'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const PostulacionesCandidatos = () => {

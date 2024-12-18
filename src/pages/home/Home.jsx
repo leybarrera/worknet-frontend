@@ -241,8 +241,11 @@ const Home = () => {
         {/* Main */}
         <main className="flex-1 max-h-auto h-fit bg-white border border-gray-200 rounded-xl shadow-md p-6">
           <h1 className="text-2xl font-bold mb-4">Ofertas de Trabajo</h1>
-          <p className="text-gray-700 mb-6">
+          <p className="text-gray-700 mb-2">
             Aquí puedes explorar las ofertas de trabajo disponibles.
+          </p>
+          <p className="text-red-500 mb-6 text-sm">
+            Nota: Template de como ser verán las ofertas de trabajo.
           </p>
 
           {/* Condicional para mostrar el banner si no hay ofertas */}

@@ -114,7 +114,7 @@ const Contact = () => {
         style={{ width: '300px', height: '300px' }}
       />
       <h2 className="text-3xl font-semibold mt-4 text-gray-400 text-center">
-        Proximameente. Sección de contactos y mensajes....
+        Proximamente. Sección de contactos y mensajes....
       </h2>
     </div>
   )
