@@ -52,6 +52,11 @@ const Chatbot = ({ setIsOpen }) => {
       '¿me puedes explicar cómo usarla?',
       '¿cómo es el procedimiento?',
     ],
+    '¿que haces?': [
+      '¿qué haces?',
+      '¿qué nomás haces?',
+      '¿para que nomás sirves?',
+    ],
     '¿cómo me registro?': [
       '¿cómo me registro?',
       '¿cómo puedo registrarme?',
@@ -63,6 +68,12 @@ const Chatbot = ({ setIsOpen }) => {
       '¿cómo iniciar sesión?',
     ],
     horarios: [
+      'hora',
+      'hasta que hora?',
+      '¿Hasta que hora?',
+      'atención',
+      'atiendan',
+      'horario',
       'horarios',
       '¿cuáles son sus horarios?',
       '¿a qué hora atienden?',
@@ -123,6 +134,38 @@ const Chatbot = ({ setIsOpen }) => {
       'hasta pronto',
       'chau',
     ],
+    insultos: [
+      'idiota',
+      'tonto',
+      'imbécil',
+      'estúpido',
+      'vete a la mierda',
+      'maldito',
+      'bobo',
+      'tarado',
+      'payaso',
+      'mierda',
+      'no sirves',
+      'no sirves para nada',
+      'incompetente',
+      'plataforma basura',
+      'basura',
+      'caca',
+      'inservible',
+      'plataforma obsoleta',
+    ],
+    disculpas: [
+      'perdón',
+      'lo siento',
+      'me disculpo',
+      'me arrepiento',
+      'estoy arrepentido',
+      'me equivoqué',
+      'perdoname',
+      'sorry',
+      'im sorry',
+      'i sorry',
+    ],
     default: [
       'default',
       'no entiendo',
@@ -150,6 +193,12 @@ const Chatbot = ({ setIsOpen }) => {
       'Si tienes un problema técnico, por favor escríbenos a soporte@ejemplo.com detallando el inconveniente o utiliza la sección de ayuda en la plataforma.',
     gracias: '¡De nada! Si tienes más preguntas, no dudes en escribir.',
     adios: '¡Hasta luego! Que tengas un excelente día.',
+    insultos:
+      'Por favor, mantengamos una conversación respetuosa. Estoy aquí para ayudarte.',
+    '¿que haces?':
+      'Como plataforma puedo hacer muchas cosas. Registrar candidatos, empresas que buscan trabajadores, evaluar perfiles para asegurar un máximo de compatibilidad del candidato con el puesto de trabajo, funciono con comandos de voz y tengo un ChatBot súper intuitivo que podrá resolver algunas de tus dudas. ¿Tienes alguna duda? Recuerda que puedes usar palabras claves como: horarios, contacto, precios...etc. Me han entrenado para comprender tus necesidades. Si no las entiendo me sirve para seguir aprendiendo.',
+    disculpas:
+      'No te preocupes. Sigamos adelante. Si puedo ayudarte lo haré con gusto, siempre manteniendo el respeto.',
     default:
       'Lo siento, no entiendo esa pregunta. ¿Podrías intentar reformularla? Estoy aquí para ayudarte.',
   }
