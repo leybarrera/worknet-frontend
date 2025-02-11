@@ -147,16 +147,19 @@ const PostulationModal = ({ toggleModal, postulation, onRefresh }) => {
             <h2 className="text-xl font-bold text-gray-800">
               Detalle del candidato
             </h2>
-            <div className="flex flex-row items-center gap-2">
-              <NavLink
-                to={resume}
-                target="__blank"
-                className="flex flex-row items-center gap-1 text-sm text-[#00B4B7] underline"
-              >
-                <h4>Ver CV</h4>
-                <TbPdf />
-              </NavLink>
-            </div>
+
+            {resume && (
+              <div className="flex flex-row items-center gap-2">
+                <NavLink
+                  to={resume}
+                  target="__blank"
+                  className="flex flex-row items-center gap-1 text-sm text-[#00B4B7] underline"
+                >
+                  <h4>Ver CV</h4>
+                  <TbPdf />
+                </NavLink>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col mt-5">
