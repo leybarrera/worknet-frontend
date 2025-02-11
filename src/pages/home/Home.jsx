@@ -261,21 +261,15 @@ const Home = () => {
                 className="w-full h-full object-cover absolute"
               />
             </div>
-            <h3 className="font-bold text-xl mt-4">
+            <h3 className="font-bold text-xl mt-4 text-center">
               {currentUser?.name} {currentUser?.surname}
             </h3>
-            <p className="text-sm text-gray-600">
-              Desarrollador Web Full Stack
-            </p>
+            <p className="text-sm text-gray-600">{currentUser?.email}</p>
           </header>
 
           {/* Additional Info */}
           <section className="px-6 py-4">
             <ul className="space-y-2 text-sm text-gray-700">
-              <li>
-                <span className="font-semibold">Email:</span>{' '}
-                {currentUser?.email}
-              </li>
               <li>
                 <span className="font-semibold">Teléfono:</span> +593{' '}
                 {currentUser?.phone?.substring(1)}
