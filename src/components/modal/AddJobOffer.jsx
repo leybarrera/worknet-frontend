@@ -7,6 +7,7 @@ const AddJobOffer = ({
   company_id,
   success_update,
   error_update,
+  incompletedOffer,
 }) => {
   const initialState = {
     title: '',
@@ -14,8 +15,11 @@ const AddJobOffer = ({
     location: '',
     job_type: '',
     salary: '',
+    education_level: '',
     CompanyId: company_id,
   }
+
+  const [isSaving, setIsSaving] = useState(false)
   const [data, setData] = useState(initialState)
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -27,11 +31,13 @@ const AddJobOffer = ({
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
     if (Object.values(data).some((value) => value === '')) {
-      alert('La oferta de trabajo esta incompleta')
+      incompletedOffer()
       return
     }
+    setIsSaving(true)
+
+    console.log(data)
 
     offersAPI
       .create(data)
@@ -43,6 +49,9 @@ const AddJobOffer = ({
         }, 1500)
       })
       .catch((err) => console.log(err))
+      .finally(() => {
+        setIsSaving(false)
+      })
   }
 
   return (
@@ -108,7 +117,7 @@ const AddJobOffer = ({
                   <option selected disabled>
                     Seleccione el tipo
                   </option>
-                  <option value="Tiempo Completo">Tiempo completo</option>
+                  <option value="Tiempo completo">Tiempo completo</option>
                   <option value="Medio tiempo">Medio tiempo</option>
                   <option value="Contrato">Contrato</option>
                   <option value="Freelance">Freelance</option>
@@ -118,21 +127,55 @@ const AddJobOffer = ({
             </div>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="" className="text-lg font-bold">
-              Salario
-            </label>
-            <input
-              type="number"
-              name="salary"
-              value={data.salary}
-              onChange={handleChange}
-              className="w-full border border-gray-200 py-3 rounded-lg bg-gray-100 text-gray-600 px-4 outline-[#00b4b7]"
-            />
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col gap-1">
+              <label htmlFor="" className="text-lg font-bold">
+                Estudios requeridos
+              </label>
+              <div className="flex w-full bg-gray-100 rounded-lg overflow-hidden focus-within:border-[#00b4b7] border">
+                <select
+                  className="w-full px-4 py-3 text-gray-600 outline-none text-base bg-gray-100"
+                  onChange={handleChange}
+                  name="education_level"
+                >
+                  <option selected disabled>
+                    Seleccione el nivel de estudios
+                  </option>
+                  <option value="Primaria">Primaria</option>
+                  <option value="Secundaria">Secundaria</option>
+                  <option value="Técnico">Técnico</option>
+                  <option value="Tecnológico">Tecnológico</option>
+                  <option value="Universitario">Universitario</option>
+                  <option value="Postgrado">Postgrado</option>
+                  <option value="Doctorado">Doctorado</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label htmlFor="" className="text-lg font-bold">
+                Salario
+              </label>
+              <input
+                type="number"
+                name="salary"
+                value={data.salary}
+                onChange={handleChange}
+                className="w-full border border-gray-200 py-3 rounded-lg bg-gray-100 text-gray-600 px-4 outline-[#00b4b7]"
+              />
+            </div>
           </div>
 
-          <button className="mt-3 w-full bg-[#00b4b7] text-white py-3 rounded-lg text-lg font-bold">
-            Generar Oferta
+          <button
+            className={`mt-3 w-full  text-white py-3 rounded-lg text-lg font-bold flex flex-row items-center gap-2 justify-center ${
+              isSaving ? 'bg-gray-400' : 'bg-[#00b4b7]'
+            }`}
+            disabled={isSaving}
+          >
+            {isSaving && (
+              <div className="w-6 h-6 rounded-full border-4 border-dotted border-b-white/30 animate-spin" />
+            )}
+            <p>{isSaving ? 'Generando' : 'Generar Oferta'}</p>
           </button>
         </form>
       </div>

@@ -1,12 +1,18 @@
 import './Loader.css'
 
-const Loader = ({ text }) => {
+const Loader = () => {
   return (
-    <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-5 justify-center items-center bg-white z-50">
-      <div className="loader"></div>
-      <p className="text-lg text-gray-600 mt-2 font-bold">
-        {text || 'Cargando...'}
-      </p>
+    <div className="dot-container">
+      <div className="dot-spinner">
+        <div className="dot-spinner__dot"></div>
+        <div className="dot-spinner__dot"></div>
+        <div className="dot-spinner__dot"></div>
+        <div className="dot-spinner__dot"></div>
+        <div className="dot-spinner__dot"></div>
+        <div className="dot-spinner__dot"></div>
+        <div className="dot-spinner__dot"></div>
+        <div className="dot-spinner__dot"></div>
+      </div>
     </div>
   )
 }

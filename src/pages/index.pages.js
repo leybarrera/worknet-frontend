@@ -6,6 +6,7 @@ import RegisterCompany from './register/RegisterCompany'
 import Applications from './applications/Applications'
 import JobDetails from './job-detail/JobDetails'
 import Settings from './settings/Settings'
+import Profile from './profile/Profile'
 export {
   Applications,
   Contact,
@@ -15,4 +16,5 @@ export {
   RegisterCompany,
   JobDetails,
   Settings,
+  Profile,
 }

@@ -8,6 +8,7 @@ import {
   Settings,
   RegisterUser,
   RegisterCompany,
+  Profile,
 } from '../pages/index.pages'
 import Root from '../layout/Root'
 import DashboardLayout from '../layout/DashboardLayout'
@@ -22,6 +23,7 @@ import {
 } from '../pages/dashboard'
 import EmpresaDashboard from '../layout/EmpresaDashboard.layout'
 import {
+  ConfiguracionEmpresa,
   OfertasEmpresa,
   PostulacionesCandidatos,
 } from '../pages/empresa-dashboard'
@@ -83,6 +85,7 @@ const AppRouter = () => {
         <Route path="/ofertas" element={<Offers />} />
         <Route path="/detalle_oferta" element={<JobDetails />} />
         <Route path="/ajustes" element={<Settings />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
       <Route path="/dashboard" element={<DashboardLayout />}>
@@ -100,10 +103,18 @@ const AppRouter = () => {
       </Route>
 
       <Route path="/empresa-dashboard" element={<EmpresaDashboard />}>
+        <Route
+          index
+          element={<Navigate to={'/empresa-dashboard/configuracion'} />}
+        />
         <Route path="/empresa-dashboard/ofertas" element={<OfertasEmpresa />} />
         <Route
           path="/empresa-dashboard/postulaciones"
           element={<PostulacionesCandidatos />}
+        />
+        <Route
+          path="/empresa-dashboard/configuracion"
+          element={<ConfiguracionEmpresa />}
         />
       </Route>
     </Routes>

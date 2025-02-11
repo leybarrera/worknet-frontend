@@ -1,12 +1,31 @@
 import { useEffect, useState } from 'react'
 import Loader from '../../components/loader/Loader'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import LottieView from 'lottie-react'
 import noData from '../../assets/no-data.json'
+import { storageUtil } from '../../utils/index.utils'
+import { toast, Toaster } from 'sonner'
+import { applicationsAPI } from '../../api/applications/applications.api'
+import { setApplications } from '../../redux/slices/applicants.slice'
+import DetailPostulation from '../../components/modal/DetailPostulation'
 
 const Applications = () => {
   const { applications } = useSelector((state) => state.applicants)
   const [isMounted, setIsMounted] = useState(false)
+  const [showPostulationDetail, setShowPostulationDetail] = useState(false)
+  const [application, setApplication] = useState(null)
+  const [currentUser, setCurrentUser] = useState({})
+  const dispatch = useDispatch()
+
+  const onClose = () => {
+    setShowPostulationDetail(false)
+    getAllData()
+  }
+
+  const viewPostulationDetail = (current) => {
+    setApplication(current)
+    setShowPostulationDetail(true)
+  }
 
   const renderApplication = (application) => {
     return (
@@ -20,26 +39,60 @@ const Applications = () => {
             alt="Empresa"
             className="w-12 h-12 rounded-full object-cover mr-4"
           />
-          <div>
-            <p className="text-lg font-semibold">Desarrollador Backend</p>
-            <p className="text-sm text-gray-500">Empresa XYZ</p>
+          <div className="flex flex-col gap-1">
+            <p className="text-lg font-semibold">
+              {application.JobOffer.title}
+            </p>
+            <div className="flex flex-row items-center gap-1">
+              <p className="text-sm text-gray-500">
+                {application.JobOffer.Company.name}
+              </p>
+              <p className="text-sm text-gray-500">-</p>
+              <p className="text-sm text-gray-500">
+                {application.JobOffer.location}
+              </p>
+            </div>
             <p className="text-sm text-gray-600 mt-2">
               Estado:{' '}
-              <span className="text-green-600">Postulación enviada</span>
+              <span className="text-green-600">{application.status}</span>
             </p>
           </div>
         </div>
-        <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
+        <button
+          className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors"
+          onClick={() => viewPostulationDetail(application)}
+        >
           Ver Detalles
         </button>
       </div>
     )
   }
 
+  const getAllData = () => {
+    const { id } = currentUser
+    applicationsAPI
+      .getByUser(id)
+      .then((res) => {
+        const { jobApplications } = res.data
+        dispatch(setApplications(jobApplications))
+      })
+      .finally(() => {
+        setIsMounted(true)
+      })
+  }
+
   useEffect(() => {
-    setTimeout(() => {
-      setIsMounted(true)
-    }, 3500)
+    if (currentUser) {
+      getAllData()
+    }
+  }, [currentUser])
+
+  useEffect(() => {
+    const data = storageUtil.getFromLocalStorage('session_info')
+    if (data) {
+      const { user } = data
+      setCurrentUser(user)
+    }
   }, [])
 
   if (!isMounted) return <Loader text={'Cargando postulaciones...'} />
@@ -69,6 +122,10 @@ const Applications = () => {
           </button>
         </div>
       </section>
+      {showPostulationDetail && (
+        <DetailPostulation application={application} onClose={onClose} />
+      )}
+      <Toaster richColors />
     </main>
   ) : (
     <div className="w-full h-full flex-1 flex flex-col justify-center items-center">
@@ -81,6 +138,7 @@ const Applications = () => {
       <h2 className="text-3xl font-semibold mt-4 text-gray-400 text-center">
         Aún no tienes registradas postulaciones.
       </h2>
+      <Toaster richColors />
     </div>
   )
 }

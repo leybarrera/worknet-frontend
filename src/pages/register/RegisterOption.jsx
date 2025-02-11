@@ -30,9 +30,9 @@ const RegisterOption = () => {
           onClick={() => handleOptionClick('user')}
         >
           <h2 className="text-2xl font-semibold mb-4 text-center">
-            Soy un Usuario
+            Soy candidato
           </h2>
-          <p className="text-center text-gray-700 hover:text-white">
+          <p className="text-center">
             Regístrate para buscar empleo y conectar con empresas.
           </p>
           {/* Animación Lottie */}
@@ -50,9 +50,9 @@ const RegisterOption = () => {
           onClick={() => handleOptionClick('company')}
         >
           <h2 className="text-2xl font-semibold mb-4 text-center">
-            Soy una Empresa
+            Busco candidatos
           </h2>
-          <p className="text-center text-gray-700 hover:text-white">
+          <p className="text-center ">
             Registra tu empresa y publica ofertas laborales.
           </p>
           {/* Animación Lottie */}

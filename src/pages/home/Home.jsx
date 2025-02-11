@@ -7,7 +7,7 @@ import {
   FaHistory,
   FaQuestionCircle,
 } from 'react-icons/fa'
-import { FaPaperPlane, FaUsers } from 'react-icons/fa6'
+import { FaPaperPlane, FaRectangleList, FaUsers } from 'react-icons/fa6'
 import { ChatbotContext } from '../../context/ChatbotContext'
 import { useDispatch, useSelector } from 'react-redux'
 import { storageUtil } from '../../utils/index.utils'
@@ -23,6 +23,8 @@ import { userEndpoints } from '../../api/user/user.api'
 import { setUsers } from '../../redux/slices/users.slices'
 import { offersAPI } from '../../api/ofertas/ofertas.api'
 import { setOfertas } from '../../redux/slices/ofertas.slices'
+import { RiMoneyDollarCircleFill } from 'react-icons/ri'
+import { IoSchoolSharp } from 'react-icons/io5'
 
 const Home = () => {
   const [hovered, setHovered] = useState(false)
@@ -31,9 +33,49 @@ const Home = () => {
   const { users } = useSelector((state) => state.users)
   const dispatch = useDispatch()
   const [id, setId] = useState(null)
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState(null)
   const { isOpen, setIsOpen } = useContext(ChatbotContext)
   const { ofertas } = useSelector((state) => state.ofertas)
+
+  const applyOffer = (JobOfferId) => {
+    const UserId = id
+    applicationsAPI
+      .applyOffer({
+        UserId,
+        JobOfferId,
+      })
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        getAllData()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const cancelOffer = (JobOfferId) => {
+    const UserId = id
+    applicationsAPI
+      .cancelOffer(UserId, JobOfferId)
+      .then((res) => {
+        const { message } = res.data
+        toast.success(message)
+        getAllData()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const isCandidate = (jobOfferId) => {
+    const existApplication = applications.find((application) => {
+      if (application.JobOfferId === jobOfferId && application.UserId === id) {
+        return application
+      }
+    })
+    return existApplication
+  }
 
   const isFollowing = (id) => {
     const contactsID = contacts.map((contact) => contact.UserTargetId)
@@ -78,22 +120,66 @@ const Home = () => {
         <div className="flex justify-between items-center mb-3">
           <div>
             <p className="text-lg font-semibold">{offer.title}</p>
-            <p className="text-sm text-gray-500">
-              Empresa ABC - Quito, Ecuador
-            </p>
+            <div className="flex flex-row items-center gap-1">
+              <p className="text-sm text-gray-500">{offer.Company.name}</p>
+              <p className="text-sm text-gray-500">-</p>
+              <p className="text-sm text-gray-500">{offer.location}</p>
+            </div>
           </div>
-          <span className="text-xs text-[#00b4b7] bg-[#e6fdfd] px-2 py-1 rounded-full">
-            Urgente
-          </span>
         </div>
-        <p className="text-gray-600 text-sm mb-4">{offer.description}</p>
-        <div className="flex justify-between items-center">
+
+        {/* Descripcion del puesto */}
+        <div className="flex flex-col gap-1">
+          {/* Salario */}
+          <div className="flex flex-row items-center gap-2">
+            <RiMoneyDollarCircleFill color="#4EB5B7" />
+            <h3 className="font-semibold">Salario: </h3>
+            <h5 className="text-sm text-gray-500">{offer.salary}</h5>
+          </div>
+          {/* Tipo de contrato */}
+          <div className="flex flex-row items-center gap-2">
+            <FaRectangleList color="#4EB5B7" />
+            <h3 className="font-semibold">Tipo de contrato: </h3>
+            <h5 className="text-sm text-gray-500">{offer.job_type}</h5>
+          </div>
+          {/* Educación requerida */}
+          <div className="flex flex-row items-center gap-2">
+            <IoSchoolSharp color="#4EB5B7" />
+            <h3 className="font-semibold">Nivel de estudio: </h3>
+            <h5 className="text-sm text-gray-500">{offer.education_level}</h5>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2 mt-3 py-5 border-y border-gray-200 mb-5">
+          <h3 className="text-lg font-semibold">Descripción del puesto</h3>
+          <p className="text-gray-600 text-sm mb-4">{offer.description}</p>
+        </div>
+
+        <div className="flex flex-row justify-between items-center">
           {/* <p className="text-sm text-gray-500">Publicado hace 2 días</p> */}
-          {currentUser.role === 'Candidato' && (
-            <button className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors">
-              Postularme
-            </button>
-          )}
+          {currentUser?.role === 'Candidato' &&
+            (isCandidate(offer.id) ? (
+              <button
+                className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors"
+                onClick={() => cancelOffer(offer.id)}
+              >
+                Anular postulación
+              </button>
+            ) : (
+              <button
+                className="px-6 py-2 text-sm text-white bg-[#00b4b7] rounded-md hover:bg-[#00a7a3] transition-colors"
+                onClick={() => applyOffer(offer.id)}
+              >
+                Postularme
+              </button>
+            ))}
+
+          <div className="px-6 py-2 flex flex-row items-center gap-1 border border-[#00B4B7] rounded-md text-[#00B4B7] cursor-pointer hover:bg-[#00B4B7] transition-colors hover:text-white">
+            <h3 className="text-sm font-semibold">Creado el: </h3>
+            <h3 className="text-sm">
+              {new Date(offer.posted_at).toLocaleDateString('es-ES')}
+            </h3>
+          </div>
         </div>
       </div>
     )
@@ -116,7 +202,6 @@ const Home = () => {
         .getByUser(id)
         .then((res) => {
           const { connections } = res.data
-          console.log(connections)
           dispatch(setContacts(connections))
         })
         .catch((err) => {
@@ -127,6 +212,7 @@ const Home = () => {
         .getAll()
         .then((res) => {
           const { jobOffers } = res.data
+          console.log(jobOffers)
           dispatch(setOfertas(jobOffers))
         })
         .catch((err) => {
@@ -166,13 +252,17 @@ const Home = () => {
           <header className="flex flex-col items-center border-b border-[#00b4b7]/40 p-6">
             <div className="w-24 h-24 rounded-full bg-green-400 relative overflow-hidden">
               <img
-                src="/public/profile.png"
+                src={
+                  currentUser?.profile_picture
+                    ? currentUser.profile_picture
+                    : '/public/profile.png'
+                }
                 alt="Profile"
                 className="w-full h-full object-cover absolute"
               />
             </div>
             <h3 className="font-bold text-xl mt-4">
-              {currentUser.name} {currentUser.surname}
+              {currentUser?.name} {currentUser?.surname}
             </h3>
             <p className="text-sm text-gray-600">
               Desarrollador Web Full Stack
@@ -184,15 +274,15 @@ const Home = () => {
             <ul className="space-y-2 text-sm text-gray-700">
               <li>
                 <span className="font-semibold">Email:</span>{' '}
-                {currentUser.email}
+                {currentUser?.email}
               </li>
               <li>
                 <span className="font-semibold">Teléfono:</span> +593{' '}
-                {currentUser.phone?.substring(1)}
+                {currentUser?.phone?.substring(1)}
               </li>
               <li>
                 <span className="font-semibold">Ubicación:</span>{' '}
-                {currentUser.location}
+                {currentUser?.location}
               </li>
             </ul>
           </section>
@@ -200,7 +290,7 @@ const Home = () => {
           {/* Navigation Links */}
           <nav className="px-6 py-4 border-t border-gray-200">
             {/* Primera opción */}
-            {currentUser.role === 'Candidato' && (
+            {currentUser?.role === 'Candidato' && (
               <NavLink
                 className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
                 to={'/aplicaciones'}
@@ -218,7 +308,7 @@ const Home = () => {
             )}
 
             {/* Segunda opción */}
-            {currentUser.role === 'Candidato' && (
+            {currentUser?.role === 'Candidato' && (
               <NavLink
                 className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
                 to={'/mis_contactos'}
@@ -233,17 +323,8 @@ const Home = () => {
               </NavLink>
             )}
 
-            {/* Historial */}
-            <NavLink
-              className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
-              to={'/'}
-            >
-              <FaHistory className="text-xl text-gray-700" />
-              <h4 className="text-base text-gray-800 font-medium">Historial</h4>
-            </NavLink>
-
             {/* Configuración */}
-            {currentUser.role === 'Candidato' && (
+            {currentUser?.role === 'Candidato' && (
               <NavLink
                 className="flex items-center gap-3 py-4 hover:bg-gray-50 rounded-lg px-3"
                 to={'/ajustes'}
@@ -306,7 +387,7 @@ const Home = () => {
         </main>
 
         <aside className="w-[350px] bg-white border border-gray-200 rounded-xl shadow-md p-6 max-h-auto h-fit">
-          {currentUser.role === 'Candidato' ? (
+          {currentUser?.role === 'Candidato' ? (
             <h2 className="text-xl font-bold mb-4">Añadir a tu red</h2>
           ) : (
             <h2 className="text-xl font-bold mb-4">Buscan trabajo</h2>

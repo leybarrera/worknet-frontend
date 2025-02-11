@@ -11,4 +11,19 @@ const removeStorage = (key) => {
   localStorage.removeItem(key)
 }
 
-export default { saveToLocalStorage, getFromLocalStorage, removeStorage }
+const updateStorage = (key, keyValue, value) => {
+  const storage = getFromLocalStorage(key)
+  const newStorage = {
+    ...storage,
+    [keyValue]: value,
+  }
+
+  saveToLocalStorage(key, newStorage)
+}
+
+export default {
+  saveToLocalStorage,
+  getFromLocalStorage,
+  removeStorage,
+  updateStorage,
+}

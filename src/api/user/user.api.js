@@ -73,6 +73,21 @@ export const userEndpoints = {
     return instance.put(`/users/${id}/references`, data)
   },
 
+  updateWithImage: (data) => {
+    return instance.put(`/users/with-image`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+  },
+  updateWithoutImage: (data) => {
+    return instance.put(`/users/without-image`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+  },
+
   recoveryUser: (id) => {
     return instance.put(`/recovery/${id}`)
   },

@@ -29,7 +29,7 @@ const ProfileMenu = ({ closeAllMenus }) => {
           {/* Settings Option */}
           <li>
             <NavLink
-              to="/settings"
+              to="/ajustes"
               className="px-4 py-2 flex items-center gap-3 text-sm text-gray-700 hover:bg-[#f0f9f9] hover:text-[#00b4b7] rounded-md transition-all duration-300"
             >
               <RiSettings3Fill size={18} />

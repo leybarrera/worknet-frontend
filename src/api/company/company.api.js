@@ -15,6 +15,9 @@ export const companyEndpoints = {
   update: (id, data) => {
     return instance.put(`/${model}/${id}`, data)
   },
+  updatePassword: (id, password) => {
+    return instance.patch(`/${model}/change-password/${id}`, { password })
+  },
   delete: (id) => {
     return instance.delete(`/${model}/${id}`)
   },

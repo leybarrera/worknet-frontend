@@ -189,12 +189,6 @@ const Nav = () => {
                 <RiAdminFill size={20} className="text-[#00b4b7]" />
               </NavLink>
             )}
-            <NavLink
-              to={'/ofertas'}
-              className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"
-            >
-              <IoIosBriefcase size={20} className="text-[#00b4b7]" />
-            </NavLink>
 
             <div className="relative">
               {/* Message Button */}
@@ -231,7 +225,11 @@ const Nav = () => {
               onClick={toggleProfileMenu}
             >
               <img
-                src="/public/profile.png"
+                src={
+                  currentUser?.profile_picture
+                    ? currentUser.profile_picture
+                    : '/public/profile.png'
+                }
                 alt="User Profile"
                 className="w-full h-full object-cover"
               />

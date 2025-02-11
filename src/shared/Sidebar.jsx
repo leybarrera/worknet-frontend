@@ -1,15 +1,11 @@
 import { IoIosBusiness } from 'react-icons/io'
-import {
-  RiBriefcase4Fill,
-  RiFileList3Fill,
-  RiCustomerService2Fill,
-  RiBarChartFill,
-  RiSettings3Fill,
-} from 'react-icons/ri'
+import { RiBriefcase4Fill, RiFileList3Fill, RiGroupFill } from 'react-icons/ri'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { storageUtil } from '../utils/index.utils'
+import { useEffect, useState } from 'react'
 
 const Sidebar = () => {
+  const [company, setCompany] = useState(null)
   const navigate = useNavigate()
 
   const closeSession = () => {
@@ -18,6 +14,11 @@ const Sidebar = () => {
       navigate('/inicio_sesion')
     }, 1500)
   }
+
+  useEffect(() => {
+    const { company } = storageUtil.getFromLocalStorage('session_info')
+    setCompany(company)
+  }, [])
   return (
     <aside className="fixed w-[300px] h-full bg-[#007a7d] border-r border-gray-300">
       {/* Header section */}
@@ -31,10 +32,10 @@ const Sidebar = () => {
         </div>
 
         <h3 className="text-lg text-white group-hover:text-[#00e5e8] transition-colors duration-300 text-justify font-bold">
-          Edison Barrera
+          {company?.name}
         </h3>
         <h5 className="tracking-wide text-gray-200 font-semibold text-nowrap">
-          Administrador de Empresa
+          Empresa
         </h5>
       </section>
 
@@ -44,7 +45,7 @@ const Sidebar = () => {
           {/* Gestionar Empresa */}
           <NavLink
             // to="/empresa-dashboard/gestionar"
-            to="/empresa-dashboard/ofertas"
+            to="/empresa-dashboard/configuracion"
             className={({ isActive }) =>
               isActive
                 ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
@@ -70,8 +71,7 @@ const Sidebar = () => {
 
           {/* Postulaciones */}
           <NavLink
-            // to="/empresa-dashboard/postulaciones"
-            to="/empresa-dashboard/ofertas"
+            to="/empresa-dashboard/postulaciones"
             className={({ isActive }) =>
               isActive
                 ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
@@ -80,48 +80,6 @@ const Sidebar = () => {
           >
             <RiFileList3Fill size={20} />
             Postulaciones
-          </NavLink>
-
-          {/* Reportes */}
-          <NavLink
-            // to="/empresa-dashboard/reportes"
-            to="/empresa-dashboard/ofertas"
-            className={({ isActive }) =>
-              isActive
-                ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
-                : `px-8 py-5 text-gray-300 flex items-center gap-2 border-b border-gray-400 hover:text-white hover:bg-[#005b5c] transition-all duration-300`
-            }
-          >
-            <RiBarChartFill size={20} />
-            Reportes
-          </NavLink>
-
-          {/* Configuración */}
-          <NavLink
-            // to="/empresa-dashboard/configuracion"
-            to="/empresa-dashboard/ofertas"
-            className={({ isActive }) =>
-              isActive
-                ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
-                : `px-8 py-5 text-gray-300 flex items-center gap-2 border-b border-gray-400 hover:text-white hover:bg-[#005b5c] transition-all duration-300`
-            }
-          >
-            <RiSettings3Fill size={20} />
-            Configuración
-          </NavLink>
-
-          {/* Soporte */}
-          <NavLink
-            // to="/empresa-dashboard/soporte"
-            to="/empresa-dashboard/ofertas"
-            className={({ isActive }) =>
-              isActive
-                ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`
-                : `px-8 py-5 text-gray-300 flex items-center gap-2 border-b border-gray-400 hover:text-white hover:bg-[#005b5c] transition-all duration-300`
-            }
-          >
-            <RiCustomerService2Fill size={20} />
-            Soporte
           </NavLink>
         </ul>
       </section>

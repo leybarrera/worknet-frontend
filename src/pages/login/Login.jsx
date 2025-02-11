@@ -1,16 +1,22 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RiLock2Fill, RiMailLine } from 'react-icons/ri'
 import { Link, useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
 import { authEndpoints } from '../../api/auth/auth.api'
 import { storageUtil } from '../../utils/index.utils'
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from '../../components/loader/Loader'
+import { setCompany } from '../../redux/slices/session.slice'
 
 const Login = () => {
+  const { isLogin } = useSelector((state) => state.session)
+  const dispatch = useDispatch()
   const initialData = {
     email: '',
     password: '',
   }
   const [data, setData] = useState(initialData)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -34,7 +40,6 @@ const Login = () => {
             if (res.status === 200) {
               toast.success('Inicio de sesión exitoso')
               const { user, company } = res.data
-              console.log(res.data)
               storageUtil.saveToLocalStorage('session_info', res.data)
               if (user) {
                 if (user.role === 'Administrador') {
@@ -50,6 +55,7 @@ const Login = () => {
               }
 
               if (company) {
+                dispatch(setCompany(company))
                 setTimeout(() => {
                   navigate('/empresa-dashboard')
                 }, 1500)
@@ -68,7 +74,16 @@ const Login = () => {
     }
   }
 
-  return (
+  useEffect(() => {
+    setLoading(false)
+    if (isLogin) {
+      navigate('/')
+    }
+  }, [])
+
+  return loading ? (
+    <Loader />
+  ) : (
     <div className="relative w-full h-screen grid grid-cols-2 overflow-hidden">
       {/* Sección Izquierda */}
       <div className="relative w-full h-screen">
