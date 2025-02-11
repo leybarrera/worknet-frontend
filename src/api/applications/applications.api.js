@@ -3,6 +3,9 @@ import { instance } from '../base.api'
 const model = 'job-applications'
 
 export const applicationsAPI = {
+  getAll: () => {
+    return instance.get(`/${model}/`)
+  },
   cancelOffer: (UserId, JobOfferId) => {
     return instance.delete(
       `/${model}/delete-offer?UserId=${UserId}&JobOfferId=${JobOfferId}`
@@ -28,11 +31,9 @@ export const applicationsAPI = {
   },
 
   rejectPostulation: (id, data) => {
-    console.log(id, data)
     return instance.patch(`${model}/reject/${id}`, data)
   },
   acceptPostulation: (id, data) => {
-    console.log(id, data)
     return instance.patch(`${model}/accept/${id}`, data)
   },
 }

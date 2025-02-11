@@ -9,13 +9,14 @@ import { userEndpoints } from '../../../api/user/user.api'
 import { NavLink } from 'react-router-dom'
 import { resumeEndpoints } from '../../../api/resume/resume.api'
 import { QRCodeSVG } from 'qrcode.react'
+import { toast, Toaster } from 'sonner'
 
 const Candidatos = () => {
   const [candidatos, setCandidatos] = useState([])
   const [qrData, setQrData] = useState('')
   const [showQr, setShowQr] = useState(false)
 
-  useEffect(() => {
+  const getAll = () => {
     userEndpoints
       .getAll()
       .then((res) => {
@@ -24,13 +25,19 @@ const Candidatos = () => {
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  useEffect(() => {
+    getAll()
   }, [])
 
   const deleteUser = (id) => {
     userEndpoints
       .delete(id)
       .then((res) => {
-        console.log(res)
+        const { message } = res.data
+        toast.success(message)
+        getAll()
       })
       .catch((err) => {
         console.log(err)
@@ -165,6 +172,8 @@ const Candidatos = () => {
           </div>
         </div>
       )}
+
+      <Toaster richColors />
     </section>
   )
 }

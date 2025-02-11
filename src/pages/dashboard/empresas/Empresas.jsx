@@ -1,38 +1,34 @@
+import { useEffect, useState } from 'react'
 import { RiDeleteBin6Line } from 'react-icons/ri'
+import { companyEndpoints } from '../../../api/company/company.api'
+import { toast, Toaster } from 'sonner'
 
 const Empresas = () => {
-  const empresas = [
-    {
-      name: 'Empresa A',
-      email: 'empresaA@example.com',
-      phone: '+123456789',
-      location: 'La Maná',
-      sector: 'Tecnología',
-      website: 'https://empresaA.com',
-      ruc: 'RUC1234567890',
-      isActive: true,
-    },
-    {
-      name: 'Empresa B',
-      email: 'empresaB@example.com',
-      phone: '+987654321',
-      location: 'La Maná',
-      sector: 'Comercio',
-      website: 'https://empresaB.com',
-      ruc: 'RUC0987654321',
-      isActive: false,
-    },
-    {
-      name: 'Empresa C',
-      email: 'empresaC@example.com',
-      phone: '+1122334455',
-      location: 'La Maná',
-      sector: 'Salud',
-      website: 'https://empresaC.com',
-      ruc: 'RUC1122334455',
-      isActive: true,
-    },
-  ]
+  const [empresas, setEmpresas] = useState([])
+
+  const getAll = () => {
+    companyEndpoints
+      .getAll()
+      .then((res) => {
+        const { companies } = res.data
+        setEmpresas(companies)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const deleteCompany = (id) => {
+    companyEndpoints.delete(id).then((res) => {
+      const { message } = res.data
+      getAll()
+      toast.success(message)
+    })
+  }
+
+  useEffect(() => {
+    getAll()
+  }, [])
 
   return (
     <section className="pl-[320px] p-8 w-full">
@@ -88,7 +84,7 @@ const Empresas = () => {
                   {empresa.location}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700">
-                  {empresa.sector}
+                  {empresa.industry}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700">
                   <a
@@ -117,7 +113,7 @@ const Empresas = () => {
                 <td className="px-6 py-4 text-sm text-gray-700">
                   {/* Botón para eliminar */}
                   <button
-                    onClick={() => alert(`Eliminar empresa ${empresa.name}`)}
+                    onClick={() => deleteCompany(empresa.id)}
                     className="text-red-500 hover:text-red-700"
                   >
                     <RiDeleteBin6Line size={20} />
@@ -128,6 +124,7 @@ const Empresas = () => {
           </tbody>
         </table>
       </div>
+      <Toaster richColors />
     </section>
   )
 }

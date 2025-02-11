@@ -94,6 +94,9 @@ const Chatbot = ({ setIsOpen }) => {
       '¿es una plataforma gratuita?',
     ],
     contacto: [
+      'contacto',
+      'contactos',
+      '¿como los localizo?',
       '¿cómo los contacto?',
       '¿tienen un número de teléfono?',
       '¿dónde puedo escribirles?',
