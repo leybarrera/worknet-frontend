@@ -25,7 +25,7 @@ const PostulationModal = ({ toggleModal, postulation, onRefresh }) => {
     const data = {
       email: User.email,
       name: `${User.name} ${User.surname}`,
-      job_tilte: JobOffer.title,
+      job_title: JobOffer.title,
     }
 
     applicationsAPI
@@ -44,10 +44,11 @@ const PostulationModal = ({ toggleModal, postulation, onRefresh }) => {
 
   const acceptPostulation = (id) => {
     const { User, JobOffer } = currentPostulation
+    console.log(JobOffer)
     const data = {
       email: User.email,
       name: `${User.name} ${User.surname}`,
-      job_tilte: JobOffer.title,
+      job_title: JobOffer.title,
     }
 
     applicationsAPI
