@@ -169,6 +169,18 @@ const Chatbot = ({ setIsOpen }) => {
       'im sorry',
       'i sorry',
     ],
+    whatsapp: ['wp', 'whats', 'whatsapp', 'whatsApp', 'mensaje', 'contactar'],
+
+    ubicacion: [
+      'donde estan',
+      '¿donde estan?',
+      '¿dónde están?',
+      'ubicación',
+      'como llegó',
+      'mapa',
+      'google maps',
+      'dirección',
+    ],
     default: [
       'default',
       'no entiendo',
@@ -191,11 +203,24 @@ const Chatbot = ({ setIsOpen }) => {
     precios:
       '¡Es completamente gratis para los candidatos! Las empresas pueden optar por planes gratuitos o pagos, dependiendo de las funciones adicionales que necesiten.',
     contacto:
-      'Puedes contactarnos enviando un correo a contacto@ejemplo.com, llamando al +593-123-456-789 o a través del chat de la plataforma.',
+      'Puedes contactarnos llamando al +593-99-988-0330 o a través del chat de la plataforma.',
     'problemas técnicos':
       'Si tienes un problema técnico, por favor escríbenos a soporte@ejemplo.com detallando el inconveniente o utiliza la sección de ayuda en la plataforma.',
     gracias: '¡De nada! Si tienes más preguntas, no dudes en escribir.',
     adios: '¡Hasta luego! Que tengas un excelente día.',
+    ubicacion: (
+      <a href="https://maps.app.goo.gl/mhG6R8gJjiu2PtAGA" target="__blank">
+        Click aquí
+      </a>
+    ),
+    whatsapp: (
+      <a
+        href="https://api.whatsapp.com/send?phone=593999880330&text=Hola%F0%9F%91%8B%20Mega%20Ferreter%C3%ADa%20Bonilla%2C%20necesito%20m%C3%A1s%20informaci%C3%B3n."
+        target="__blank"
+      >
+        Envianos un mensaje. Click aquí
+      </a>
+    ),
     insultos:
       'Por favor, mantengamos una conversación respetuosa. Estoy aquí para ayudarte.',
     '¿que haces?':

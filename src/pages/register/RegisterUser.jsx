@@ -28,7 +28,6 @@ const RegisterUser = () => {
   }
 
   const handlesSubmit = async (e) => {
-    console.log(data)
     e.preventDefault()
     try {
       if (Object.values(data).every((value) => value !== '')) {
@@ -36,9 +35,9 @@ const RegisterUser = () => {
           .register(data)
           .then((res) => {
             if (res.status === 201) {
-              toast.success('Usuario registrado con éxito')
+              toast.success('Usuario registrado. Active su cuenta.')
               setTimeout(() => {
-                navigate('/inicio_sesion')
+                navigate(`/account-activation?email=${data.email}`)
               }, 1500)
             }
           })

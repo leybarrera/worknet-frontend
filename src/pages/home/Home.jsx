@@ -271,8 +271,8 @@ const Home = () => {
           <section className="px-6 py-4">
             <ul className="space-y-2 text-sm text-gray-700">
               <li>
-                <span className="font-semibold">Teléfono:</span> +593{' '}
-                {currentUser?.phone?.substring(1)}
+                <span className="font-semibold">Teléfono: </span>
+                {currentUser?.phone}
               </li>
               <li>
                 <span className="font-semibold">Ubicación:</span>{' '}

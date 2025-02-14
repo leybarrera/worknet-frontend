@@ -43,9 +43,9 @@ const RegisterCompany = () => {
           .register(data)
           .then((res) => {
             if (res.status === 201) {
-              toast.success('Empresa registrada con éxito')
+              toast.success('Empresa registrada. Active su cuenta')
               setTimeout(() => {
-                navigate('/inicio_sesion')
+                navigate(`/account-activation?email=${data.email}`)
               }, 1500)
             }
           })

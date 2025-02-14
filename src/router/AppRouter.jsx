@@ -9,6 +9,7 @@ import {
   RegisterUser,
   RegisterCompany,
   Profile,
+  ActivationCode,
 } from '../pages/index.pages'
 import Root from '../layout/Root'
 import DashboardLayout from '../layout/DashboardLayout'
@@ -28,7 +29,6 @@ import {
   PostulacionesCandidatos,
 } from '../pages/empresa-dashboard'
 import RegisterOption from '../pages/register/RegisterOption'
-import Activation from '../pages/activation/Activation'
 import ProtectedRoute from '../components/protected-route/ProtectedRoute'
 import EmpresaHome from '../pages/empresa-home/EmpresaHome'
 import Offers from '../pages/offers/Offers'
@@ -72,7 +72,7 @@ const AppRouter = () => {
         path="/account-activation"
         element={
           <ProtectedRoute>
-            <Activation />
+            <ActivationCode />
           </ProtectedRoute>
         }
       />

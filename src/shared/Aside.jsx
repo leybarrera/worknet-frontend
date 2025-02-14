@@ -42,7 +42,7 @@ const Aside = () => {
         <ul>
           {/* Usuarios */}
           <NavLink
-            // to="/dashboard/candidatos"
+            to="/dashboard/candidatos"
             className={({ isActive }) =>
               isActive
                 ? `px-8 py-5 flex items-center gap-2 border-b border-gray-400 text-white bg-[#005b5c] transition-all duration-300`

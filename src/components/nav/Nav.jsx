@@ -175,12 +175,16 @@ const Nav = () => {
         <div className="flex items-center gap-6">
           {/* Navigation Icons */}
           <div className="flex gap-3">
-            <NavLink
-              to={currentUser.role === 'Candidato' ? '/' : '/empresa-home'}
-              className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"
-            >
-              <RiHome5Fill size={20} className="text-[#00b4b7]" />
-            </NavLink>
+            {currentUser.role !== 'Administrador' && (
+              <NavLink
+                to={
+                  currentUser.role === 'Candidato' ? '/' : '/empresa-dashboard'
+                }
+                className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"
+              >
+                <RiHome5Fill size={20} className="text-[#00b4b7]" />
+              </NavLink>
+            )}
             {currentUser.role === 'Administrador' && (
               <NavLink
                 className="w-10 h-10 rounded-full bg-white flex justify-center items-center shadow-md hover:shadow-lg hover:bg-[#f3f3f3] transition-all duration-300"
